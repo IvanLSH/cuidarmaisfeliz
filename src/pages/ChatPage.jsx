@@ -69,18 +69,18 @@ function IdosoListItem({ idoso, isActive, onClick, unread }) {
       onClick={onClick}
       className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-all cursor-pointer rounded-xl ${
         isActive
-          ? 'bg-blue-700 text-white shadow-md'
-          : 'text-slate-800 hover:bg-slate-100'
+          ? 'bg-blue-700 dark:bg-blue-800 text-white shadow-md'
+          : 'text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
       }`}
     >
       <div className={`w-10 h-10 rounded-full flex items-center justify-center font-black text-sm shrink-0 ${
-        isActive ? 'bg-white text-blue-700' : 'bg-slate-200 text-slate-800'
+        isActive ? 'bg-white text-blue-700' : 'bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200'
       }`}>
         {initials}
       </div>
       <div className="flex-1 min-w-0">
         <p className="font-black text-sm truncate">{idoso.name}</p>
-        <p className={`text-xs font-bold truncate ${isActive ? 'text-blue-200' : 'text-slate-500'}`}>
+        <p className={`text-xs font-bold truncate ${isActive ? 'text-blue-200' : 'text-slate-500 dark:text-slate-400'}`}>
           {idoso.code}
         </p>
       </div>
@@ -194,20 +194,20 @@ export default function ChatPage({ onNavigate, userRole }) {
   const grouped = groupMessagesByDate(messages);
 
   return (
-    <div className="bg-slate-100 min-h-screen flex flex-col">
+    <div className="bg-slate-100 dark:bg-slate-950 min-h-screen flex flex-col transition-colors">
       <div className="max-w-5xl w-full mx-auto flex flex-col flex-1 h-[calc(100vh-130px)]">
 
         {!isIdoso ? (
-          <div className="flex flex-1 overflow-hidden rounded-2xl shadow-xl border-2 border-slate-300 m-4 bg-white">
+          <div className="flex flex-1 overflow-hidden rounded-2xl shadow-xl border-2 border-slate-300 dark:border-slate-800 m-4 bg-white dark:bg-slate-900">
 
-            <aside className="w-64 shrink-0 border-r-2 border-slate-200 flex flex-col bg-slate-50">
-              <div className="px-4 py-4 border-b-2 border-slate-200 bg-white">
-                <h2 className="font-black text-slate-950 text-base">Conversas</h2>
-                <p className="text-xs text-slate-500 font-bold mt-0.5">{idososList.length} idoso(s) vinculado(s)</p>
+            <aside className="w-64 shrink-0 border-r-2 border-slate-200 dark:border-slate-800 flex flex-col bg-slate-50 dark:bg-slate-900/50">
+              <div className="px-4 py-4 border-b-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                <h2 className="font-black text-slate-950 dark:text-white text-base">Conversas</h2>
+                <p className="text-xs text-slate-500 dark:text-slate-400 font-bold mt-0.5">{idososList.length} idoso(s) vinculado(s)</p>
               </div>
               <div className="flex-1 overflow-y-auto p-2 space-y-1">
                 {idososList.length === 0 ? (
-                  <p className="text-xs text-slate-500 font-bold text-center py-6 px-3">
+                  <p className="text-xs text-slate-500 dark:text-slate-400 font-bold text-center py-6 px-3">
                     Nenhum idoso cadastrado ainda. Use "+ Cadastrar Idoso" no menu.
                   </p>
                 ) : (
@@ -226,17 +226,17 @@ export default function ChatPage({ onNavigate, userRole }) {
             <div className="flex-1 flex flex-col overflow-hidden">
               {selectedIdoso ? (
                 <>
-                  <div className="px-5 py-3.5 border-b-2 border-slate-200 bg-white flex items-center gap-3 shrink-0">
+                  <div className="px-5 py-3.5 border-b-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex items-center gap-3 shrink-0">
                     <div className="w-9 h-9 rounded-full bg-emerald-700 text-white flex items-center justify-center font-black text-sm">
                       {(selectedIdoso.name || '?').split(' ').slice(0, 2).map((w) => w[0]).join('').toUpperCase()}
                     </div>
                     <div>
-                      <p className="font-black text-slate-950 text-sm">{selectedIdoso.name}</p>
-                      <p className="text-xs text-slate-500 font-bold">Código: {selectedIdoso.code}</p>
+                      <p className="font-black text-slate-950 dark:text-white text-sm">{selectedIdoso.name}</p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 font-bold">Código: {selectedIdoso.code}</p>
                     </div>
                     <div className="ml-auto flex items-center gap-1.5">
                       <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse inline-block"></span>
-                      <span className="text-xs text-emerald-700 font-black">Ao Vivo</span>
+                      <span className="text-xs text-emerald-700 dark:text-emerald-400 font-black">Ao Vivo</span>
                     </div>
                   </div>
 
@@ -254,18 +254,18 @@ export default function ChatPage({ onNavigate, userRole }) {
               ) : (
                 <div className="flex-1 flex items-center justify-center text-slate-400">
                   <div className="text-center space-y-3">
-                    <svg className="w-14 h-14 mx-auto text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="w-14 h-14 mx-auto text-slate-300 dark:text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                     </svg>
-                    <p className="font-black text-slate-500">Selecione um idoso para iniciar uma conversa</p>
+                    <p className="font-black text-slate-500 dark:text-slate-400">Selecione um idoso para iniciar uma conversa</p>
                   </div>
                 </div>
               )}
             </div>
           </div>
         ) : (
-          <div className="flex flex-col flex-1 overflow-hidden rounded-2xl shadow-xl border-2 border-slate-300 m-4 bg-white">
-            <div className="px-5 py-4 border-b-2 border-slate-200 bg-blue-800 text-white flex items-center gap-3 shrink-0 rounded-t-2xl">
+          <div className="flex flex-col flex-1 overflow-hidden rounded-2xl shadow-xl border-2 border-slate-300 dark:border-slate-800 m-4 bg-white dark:bg-slate-900">
+            <div className="px-5 py-4 border-b-2 border-slate-200 dark:border-slate-800 bg-blue-800 dark:bg-blue-950 text-white flex items-center gap-3 shrink-0 rounded-t-2xl">
               <div className="w-10 h-10 rounded-full bg-white text-blue-800 flex items-center justify-center font-black text-sm">
                 {(linkedCaregiver?.name || 'C').split(' ').slice(0, 2).map((w) => w[0]).join('').toUpperCase()}
               </div>
@@ -295,7 +295,7 @@ export default function ChatPage({ onNavigate, userRole }) {
         <div className="text-center pb-6">
           <button
             onClick={() => onNavigate && onNavigate('home')}
-            className="px-6 py-3 bg-slate-900 hover:bg-slate-950 text-white font-black text-base rounded-2xl shadow border-2 border-slate-950 transition cursor-pointer inline-flex items-center gap-2"
+            className="px-6 py-3 bg-slate-900 dark:bg-slate-800 hover:bg-slate-950 text-white font-black text-base rounded-2xl shadow border-2 border-slate-950 dark:border-slate-700 transition cursor-pointer inline-flex items-center gap-2"
           >
             <span>← Voltar à Página Inicial</span>
           </button>
@@ -308,7 +308,7 @@ export default function ChatPage({ onNavigate, userRole }) {
 
 function MessageList({ grouped, loading, myRole, bottomRef, isIdoso }) {
   return (
-    <div className="flex-1 overflow-y-auto px-4 py-4 space-y-1 bg-slate-50">
+    <div className="flex-1 overflow-y-auto px-4 py-4 space-y-1 bg-slate-50 dark:bg-slate-950">
       {loading ? (
         <div className="flex items-center justify-center h-full">
           <div className="flex flex-col items-center gap-3 text-slate-400">
@@ -321,7 +321,7 @@ function MessageList({ grouped, loading, myRole, bottomRef, isIdoso }) {
       ) : grouped.length === 0 ? (
         <div className="flex items-center justify-center h-full">
           <div className="text-center space-y-2 text-slate-400">
-            <svg className="w-12 h-12 mx-auto text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-12 h-12 mx-auto text-slate-300 dark:text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
             </svg>
             <p className="font-bold text-sm">Sem mensagens ainda. Diga olá!</p>
@@ -332,7 +332,7 @@ function MessageList({ grouped, loading, myRole, bottomRef, isIdoso }) {
           if (item.type === 'date') {
             return (
               <div key={`date-${idx}`} className="flex items-center justify-center my-3">
-                <span className="px-3 py-1 bg-slate-200 text-slate-600 text-xs font-black rounded-full">
+                <span className="px-3 py-1 bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-black rounded-full">
                   {item.label}
                 </span>
               </div>
@@ -351,12 +351,12 @@ function MessageList({ grouped, loading, myRole, bottomRef, isIdoso }) {
 
               <div className={`max-w-[75%] flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
                 {!isMe && (
-                  <span className="text-xs font-black text-slate-500 mb-1 ml-1">{msg.sender_name}</span>
+                  <span className="text-xs font-black text-slate-500 dark:text-slate-400 mb-1 ml-1">{msg.sender_name}</span>
                 )}
                 <div className={`px-4 py-2.5 rounded-2xl shadow-sm ${
                   isMe
-                    ? 'bg-blue-700 text-white rounded-br-sm'
-                    : 'bg-white text-slate-900 border border-slate-200 rounded-bl-sm'
+                    ? 'bg-blue-700 dark:bg-blue-600 text-white rounded-br-sm'
+                    : 'bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-700 rounded-bl-sm'
                 } ${isIdoso ? 'text-lg' : 'text-sm'}`}>
                   <p className={`font-medium leading-relaxed ${isIdoso ? 'text-lg' : 'text-sm'}`}>
                     {msg.content}
@@ -379,7 +379,7 @@ function ChatInput({ inputText, setInputText, handleSend, sending, inputRef, isI
   return (
     <form
       onSubmit={handleSend}
-      className="px-4 py-3 border-t-2 border-slate-200 bg-white flex items-center gap-3 shrink-0"
+      className="px-4 py-3 border-t-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex items-center gap-3 shrink-0"
     >
       <input
         ref={inputRef}
@@ -388,7 +388,7 @@ function ChatInput({ inputText, setInputText, handleSend, sending, inputRef, isI
         onChange={(e) => setInputText(e.target.value)}
         placeholder={isIdoso ? 'Escreva uma mensagem...' : 'Digite sua mensagem...'}
         autoComplete="off"
-        className={`flex-1 px-4 py-3 bg-slate-100 border-2 border-slate-300 rounded-2xl font-medium text-slate-950 focus:border-blue-600 outline-none transition ${
+        className={`flex-1 px-4 py-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-300 dark:border-slate-700 rounded-2xl font-medium text-slate-950 dark:text-white focus:border-blue-600 outline-none transition ${
           isIdoso ? 'text-lg' : 'text-sm'
         }`}
       />
@@ -397,8 +397,8 @@ function ChatInput({ inputText, setInputText, handleSend, sending, inputRef, isI
         disabled={sending || !inputText.trim()}
         className={`shrink-0 rounded-2xl font-black transition flex items-center justify-center cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
           isIdoso
-            ? 'w-14 h-14 bg-blue-700 hover:bg-blue-800 text-white'
-            : 'w-11 h-11 bg-blue-700 hover:bg-blue-800 text-white'
+            ? 'w-14 h-14 bg-blue-700 dark:bg-blue-600 hover:bg-blue-800 text-white'
+            : 'w-11 h-11 bg-blue-700 dark:bg-blue-600 hover:bg-blue-800 text-white'
         }`}
       >
         <svg className={isIdoso ? 'w-7 h-7' : 'w-5 h-5'} fill="none" viewBox="0 0 24 24" stroke="currentColor">

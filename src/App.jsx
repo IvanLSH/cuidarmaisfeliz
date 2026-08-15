@@ -18,7 +18,25 @@ export default function App() {
     return localStorage.getItem('cuidado_feliz_role') || null;
   });
 
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem('cuidado_feliz_theme') === 'dark';
+  });
+
   const [activePage, setActivePage] = useState('home');
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('cuidado_feliz_theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('cuidado_feliz_theme', 'light');
+    }
+  }, [darkMode]);
+
+  const toggleDarkMode = () => {
+    setDarkMode(prev => !prev);
+  };
 
   const handleSelectRole = (role) => {
     if (role === 'cuidador') {
@@ -50,7 +68,7 @@ export default function App() {
   }, [activePage]);
 
   if (!appState) {
-    return <RoleSelectionPage onSelectRole={handleSelectRole} />;
+    return <RoleSelectionPage onSelectRole={handleSelectRole} darkMode={darkMode} onToggleDarkMode={toggleDarkMode} />;
   }
 
   if (appState === 'cuidador_login') {
@@ -58,6 +76,8 @@ export default function App() {
       <LoginPage
         onLoginSuccess={handleLoginSuccess}
         onBack={() => setAppState(null)}
+        darkMode={darkMode}
+        onToggleDarkMode={toggleDarkMode}
       />
     );
   }
@@ -67,6 +87,8 @@ export default function App() {
       <IdosoLinkPage
         onLinkSuccess={handleIdosoLinkSuccess}
         onBack={() => setAppState(null)}
+        darkMode={darkMode}
+        onToggleDarkMode={toggleDarkMode}
       />
     );
   }
@@ -86,7 +108,7 @@ export default function App() {
   };
 
   return (
-    <div className={`min-h-screen flex flex-col bg-white text-slate-900 font-sans antialiased selection:bg-blue-500 selection:text-white ${
+    <div className={`min-h-screen flex flex-col bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans antialiased selection:bg-blue-500 selection:text-white ${
       isIdoso ? 'text-lg font-medium tracking-wide' : 'text-base'
     }`}>
       <Navbar
@@ -94,6 +116,8 @@ export default function App() {
         onNavigate={setActivePage}
         userRole={userRole}
         onChangeRole={handleChangeRole}
+        darkMode={darkMode}
+        onToggleDarkMode={toggleDarkMode}
       />
 
       <main className="flex-grow flex flex-col justify-center">

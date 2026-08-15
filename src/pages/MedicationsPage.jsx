@@ -140,11 +140,11 @@ export default function MedicationsPage({ userRole, onNavigate }) {
   const takenCount = medications.filter(m => m.taken).length;
 
   return (
-    <div className="py-10 bg-slate-100 min-h-screen">
+    <div className="py-10 bg-slate-100 dark:bg-slate-950 min-h-screen transition-colors">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {isIdoso && linkedCaregiver && (
-          <div className="bg-emerald-800 text-white rounded-2xl p-5 mb-6 shadow-md border-2 border-emerald-950 flex items-center justify-between font-black text-lg">
+          <div className="bg-emerald-800 dark:bg-emerald-950 text-white rounded-2xl p-5 mb-6 shadow-md border-2 border-emerald-950 dark:border-emerald-700 flex items-center justify-between font-black text-lg">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-xl bg-emerald-900 flex items-center justify-center shrink-0 border border-emerald-700">
                 <svg className="w-7 h-7 text-emerald-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -170,16 +170,16 @@ export default function MedicationsPage({ userRole, onNavigate }) {
           <span className="px-4 py-1.5 bg-blue-800 text-white text-xs sm:text-sm font-black rounded-full uppercase tracking-wider border-2 border-blue-950">
             Controle Diário
           </span>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-950 mt-3">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-950 dark:text-white mt-3">
             Gerenciamento de Medicamentos
           </h1>
-          <p className="mt-3 text-lg text-slate-800 font-bold">
+          <p className="mt-3 text-lg text-slate-800 dark:text-slate-300 font-bold">
             Acompanhe seus remédios diários, horários e marque o que já foi tomado.
           </p>
         </div>
 
         {isIdoso ? (
-          <div className="bg-blue-800 text-white rounded-2xl p-6 mb-8 shadow-md border-2 border-blue-950 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="bg-blue-800 dark:bg-blue-950 text-white rounded-2xl p-6 mb-8 shadow-md border-2 border-blue-950 dark:border-blue-700 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
               <h3 className="text-xl font-black">Progresso de Hoje</h3>
               <p className="text-white text-base font-bold mt-1">
@@ -188,7 +188,7 @@ export default function MedicationsPage({ userRole, onNavigate }) {
             </div>
           </div>
         ) : (
-          <div className="bg-blue-800 text-white rounded-2xl p-6 mb-8 shadow-md border-2 border-blue-950 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="bg-blue-800 dark:bg-blue-950 text-white rounded-2xl p-6 mb-8 shadow-md border-2 border-blue-950 dark:border-blue-700 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
               <h3 className="text-xl font-black">Painel de Prescrições do Cuidador</h3>
               <p className="text-blue-100 text-base font-bold mt-1">
@@ -197,7 +197,7 @@ export default function MedicationsPage({ userRole, onNavigate }) {
             </div>
             <button
               onClick={() => setShowAddForm(!showAddForm)}
-              className="w-full sm:w-auto px-6 py-3 bg-white text-slate-950 hover:bg-slate-100 font-black rounded-xl shadow-md text-base transition cursor-pointer border-2 border-slate-950"
+              className="w-full sm:w-auto px-6 py-3 bg-white dark:bg-slate-800 text-slate-950 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-700 font-black rounded-xl shadow-md text-base transition cursor-pointer border-2 border-slate-950 dark:border-slate-600"
             >
               {showAddForm ? 'Cancelar' : '+ Adicionar Remédio'}
             </button>
@@ -205,16 +205,16 @@ export default function MedicationsPage({ userRole, onNavigate }) {
         )}
 
         {!isIdoso && showAddForm && (
-          <form onSubmit={handleAddMedication} className="bg-white p-6 rounded-2xl border-2 border-blue-600 shadow-xl mb-8 space-y-4">
-            <h3 className="text-xl font-black text-slate-950">Cadastrar Novo Medicamento</h3>
+          <form onSubmit={handleAddMedication} className="bg-white dark:bg-slate-900 p-6 rounded-2xl border-2 border-blue-600 dark:border-blue-500 shadow-xl mb-8 space-y-4">
+            <h3 className="text-xl font-black text-slate-950 dark:text-white">Cadastrar Novo Medicamento</h3>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-extrabold text-slate-900 mb-1">Para qual idoso? *</label>
+                <label className="block text-sm font-extrabold text-slate-900 dark:text-slate-200 mb-1">Para qual idoso? *</label>
                 <select
                   value={assignedIdosoCode}
                   onChange={(e) => setAssignedIdosoCode(e.target.value)}
-                  className="w-full px-4 py-2.5 bg-white border-2 border-slate-400 rounded-xl text-base font-bold text-slate-950 focus:border-blue-700 outline-none"
+                  className="w-full px-4 py-2.5 bg-white dark:bg-slate-800 border-2 border-slate-400 dark:border-slate-700 rounded-xl text-base font-bold text-slate-950 dark:text-white focus:border-blue-700 outline-none"
                 >
                   {idososList.length === 0 ? (
                     <option value="">Nenhum idoso cadastrado ainda (Será genérico)</option>
@@ -229,47 +229,47 @@ export default function MedicationsPage({ userRole, onNavigate }) {
               </div>
 
               <div>
-                <label className="block text-sm font-extrabold text-slate-900 mb-1">Nome do Medicamento *</label>
+                <label className="block text-sm font-extrabold text-slate-900 dark:text-slate-200 mb-1">Nome do Medicamento *</label>
                 <input
                   type="text"
                   required
                   placeholder="Ex: Losartana"
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
-                  className="w-full px-4 py-2.5 bg-white border-2 border-slate-400 rounded-xl text-base font-bold text-slate-950 focus:border-blue-700 outline-none"
+                  className="w-full px-4 py-2.5 bg-white dark:bg-slate-800 border-2 border-slate-400 dark:border-slate-700 rounded-xl text-base font-bold text-slate-950 dark:text-white focus:border-blue-700 outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-extrabold text-slate-900 mb-1">Dosagem</label>
+                <label className="block text-sm font-extrabold text-slate-900 dark:text-slate-200 mb-1">Dosagem</label>
                 <input
                   type="text"
                   placeholder="Ex: 50 mg ou 1 comprimido"
                   value={newDosage}
                   onChange={(e) => setNewDosage(e.target.value)}
-                  className="w-full px-4 py-2.5 bg-white border-2 border-slate-400 rounded-xl text-base font-bold text-slate-950 focus:border-blue-700 outline-none"
+                  className="w-full px-4 py-2.5 bg-white dark:bg-slate-800 border-2 border-slate-400 dark:border-slate-700 rounded-xl text-base font-bold text-slate-950 dark:text-white focus:border-blue-700 outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-extrabold text-slate-900 mb-1">Horário *</label>
+                <label className="block text-sm font-extrabold text-slate-900 dark:text-slate-200 mb-1">Horário *</label>
                 <input
                   type="time"
                   required
                   value={newTime}
                   onChange={(e) => setNewTime(e.target.value)}
-                  className="w-full px-4 py-2.5 bg-white border-2 border-slate-400 rounded-xl text-base font-bold text-slate-950 focus:border-blue-700 outline-none"
+                  className="w-full px-4 py-2.5 bg-white dark:bg-slate-800 border-2 border-slate-400 dark:border-slate-700 rounded-xl text-base font-bold text-slate-950 dark:text-white focus:border-blue-700 outline-none"
                 />
               </div>
 
               <div className="sm:col-span-2">
-                <label className="block text-sm font-extrabold text-slate-900 mb-1">Instruções / Observações</label>
+                <label className="block text-sm font-extrabold text-slate-900 dark:text-slate-200 mb-1">Instruções / Observações</label>
                 <input
                   type="text"
                   placeholder="Ex: Tomar após o almoço"
                   value={newInstructions}
                   onChange={(e) => setNewInstructions(e.target.value)}
-                  className="w-full px-4 py-2.5 bg-white border-2 border-slate-400 rounded-xl text-base font-bold text-slate-950 focus:border-blue-700 outline-none"
+                  className="w-full px-4 py-2.5 bg-white dark:bg-slate-800 border-2 border-slate-400 dark:border-slate-700 rounded-xl text-base font-bold text-slate-950 dark:text-white focus:border-blue-700 outline-none"
                 />
               </div>
             </div>
@@ -286,13 +286,13 @@ export default function MedicationsPage({ userRole, onNavigate }) {
         )}
 
         {loading ? (
-          <div className="bg-white p-8 rounded-2xl text-center border-2 border-slate-300 text-slate-800 font-bold text-lg">
+          <div className="bg-white dark:bg-slate-900 p-8 rounded-2xl text-center border-2 border-slate-300 dark:border-slate-800 text-slate-800 dark:text-slate-200 font-bold text-lg">
             Carregando medicamentos...
           </div>
         ) : (
           <div className="space-y-4">
             {medications.length === 0 ? (
-              <div className="bg-white p-8 rounded-2xl text-center border-2 border-slate-300 text-slate-800 font-bold text-lg">
+              <div className="bg-white dark:bg-slate-900 p-8 rounded-2xl text-center border-2 border-slate-300 dark:border-slate-800 text-slate-800 dark:text-slate-200 font-bold text-lg">
                 Nenhum medicamento cadastrado ainda para este idoso.
               </div>
             ) : (
@@ -301,8 +301,8 @@ export default function MedicationsPage({ userRole, onNavigate }) {
                   key={med.id}
                   className={`p-5 sm:p-6 rounded-2xl border-2 transition-all flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm ${
                     med.taken
-                      ? 'border-blue-600 bg-blue-100 text-slate-950'
-                      : 'border-slate-300 bg-white hover:border-blue-600 text-slate-950'
+                      ? 'border-blue-600 dark:border-blue-700 bg-blue-100 dark:bg-blue-950/60 text-slate-950 dark:text-white'
+                      : 'border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-600 text-slate-950 dark:text-white'
                   }`}
                 >
                   <div className="flex items-start space-x-4">
@@ -310,7 +310,7 @@ export default function MedicationsPage({ userRole, onNavigate }) {
                       className={`px-4 py-2.5 rounded-xl flex flex-col items-center justify-center shrink-0 border-2 ${
                         med.taken
                           ? 'bg-blue-800 text-white border-blue-950'
-                          : 'bg-amber-100 text-amber-950 border-amber-400'
+                          : 'bg-amber-100 dark:bg-amber-950/80 text-amber-950 dark:text-amber-200 border-amber-400 dark:border-amber-700'
                       }`}
                     >
                       <svg className="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -321,23 +321,23 @@ export default function MedicationsPage({ userRole, onNavigate }) {
 
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
-                        <h3 className={`text-xl font-black ${med.taken ? 'line-through text-slate-600' : 'text-slate-950'}`}>
+                        <h3 className={`text-xl font-black ${med.taken ? 'line-through text-slate-600 dark:text-slate-400' : 'text-slate-950 dark:text-white'}`}>
                           {med.name}
                         </h3>
-                        <span className="text-xs font-black px-2.5 py-1 rounded-md bg-slate-200 text-slate-900 border border-slate-300">
+                        <span className="text-xs font-black px-2.5 py-1 rounded-md bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700">
                           {med.dosage}
                         </span>
                         {!isIdoso && med.idoso_name && (
-                          <span className="text-xs font-black px-2.5 py-1 rounded-md bg-blue-100 text-blue-950 border border-blue-300">
+                          <span className="text-xs font-black px-2.5 py-1 rounded-md bg-blue-100 dark:bg-blue-900/60 text-blue-950 dark:text-blue-100 border border-blue-300 dark:border-blue-700">
                             Idoso: {med.idoso_name}
                           </span>
                         )}
                       </div>
-                      <p className="text-sm font-bold text-slate-800 mt-1">{med.instructions}</p>
+                      <p className="text-sm font-bold text-slate-800 dark:text-slate-300 mt-1">{med.instructions}</p>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 w-full sm:w-auto justify-end pt-2 sm:pt-0 border-t-2 sm:border-0 border-slate-200">
+                  <div className="flex items-center gap-3 w-full sm:w-auto justify-end pt-2 sm:pt-0 border-t-2 sm:border-0 border-slate-200 dark:border-slate-800">
                     <button
                       onClick={() => handleToggleTaken(med.id)}
                       className={`px-5 py-2.5 text-sm font-black rounded-xl transition cursor-pointer border ${
@@ -352,7 +352,7 @@ export default function MedicationsPage({ userRole, onNavigate }) {
                     {!isIdoso && (
                       <button
                         onClick={() => handleDelete(med.id)}
-                        className="p-2.5 text-slate-700 hover:text-red-700 hover:bg-red-100 rounded-xl transition cursor-pointer border border-slate-300"
+                        className="p-2.5 text-slate-700 dark:text-slate-300 hover:text-red-700 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-xl transition cursor-pointer border border-slate-300 dark:border-slate-700"
                         title="Remover"
                       >
                         <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -370,7 +370,7 @@ export default function MedicationsPage({ userRole, onNavigate }) {
         <div className="mt-12 text-center">
           <button
             onClick={() => onNavigate && onNavigate('home')}
-            className="px-8 py-4 bg-slate-900 hover:bg-slate-950 text-white font-black text-lg rounded-2xl shadow-lg border-2 border-slate-950 transition cursor-pointer inline-flex items-center gap-2"
+            className="px-8 py-4 bg-slate-900 dark:bg-slate-800 hover:bg-slate-950 text-white font-black text-lg rounded-2xl shadow-lg border-2 border-slate-950 dark:border-slate-700 transition cursor-pointer inline-flex items-center gap-2"
           >
             <span>← Voltar à Página Inicial</span>
           </button>
