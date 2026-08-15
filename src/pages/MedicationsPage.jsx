@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { getMedications, createMedication, toggleMedicationTaken, deleteMedication, getToken } from '../api';
+import {
+  getMedications,
+  createMedication,
+  toggleMedicationTaken,
+  deleteMedication,
+  getLoggedInCaregiver,
+  getLinkedCaregiver,
+  getIdosoName,
+} from '../api';
 
 const DEFAULT_MEDS = [
   {
@@ -28,7 +36,7 @@ const DEFAULT_MEDS = [
   },
 ];
 
-export default function MedicationsPage() {
+export default function MedicationsPage({ userRole }) {
   const [medications, setMedications] = useState(DEFAULT_MEDS);
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -38,31 +46,35 @@ export default function MedicationsPage() {
   const [newInstructions, setNewInstructions] = useState('');
   const [isApiConnected, setIsApiConnected] = useState(false);
 
-  // Fetch medications from API on mount if token exists
+  const isIdoso = userRole === 'idoso';
+  const caregiverInfo = getLoggedInCaregiver();
+  const linkedCaregiver = getLinkedCaregiver();
+  const idosoName = getIdosoName();
+  const activeCaregiverCode = isIdoso ? linkedCaregiver?.code : caregiverInfo?.code;
+
+  // Fetch medications from API on mount
   useEffect(() => {
     async function loadData() {
-      const token = getToken();
-      if (!token) {
-        setLoading(false);
-        return;
-      }
       try {
-        const data = await getMedications();
-        setMedications(data);
-        setIsApiConnected(true);
+        const data = await getMedications(activeCaregiverCode);
+        if (data) {
+          setMedications(data);
+          setIsApiConnected(true);
+        }
       } catch (err) {
-        console.warn('API não conectada ou sem token, usando estado local:', err.message);
+        console.warn('API não conectada, usando estado local:', err.message);
       } finally {
         setLoading(false);
       }
     }
     loadData();
-  }, []);
+  }, [activeCaregiverCode]);
 
   const handleToggleTaken = async (id) => {
-    if (isApiConnected) {
+    const med = medications.find(m => m.id === id);
+    if (isApiConnected && med) {
       try {
-        const updated = await toggleMedicationTaken(id);
+        const updated = await toggleMedicationTaken(id, med.taken);
         setMedications(medications.map(m => m.id === id ? updated : m));
         return;
       } catch (err) {
@@ -70,8 +82,8 @@ export default function MedicationsPage() {
       }
     }
     // Fallback local
-    setMedications(medications.map(med => 
-      med.id === id ? { ...med, taken: !med.taken } : med
+    setMedications(medications.map(m => 
+      m.id === id ? { ...m, taken: !m.taken } : m
     ));
   };
 
@@ -86,7 +98,7 @@ export default function MedicationsPage() {
       }
     }
     // Fallback local
-    setMedications(medications.filter(med => med.id !== id));
+    setMedications(medications.filter(m => m.id !== id));
   };
 
   const handleAddMedication = async (e) => {
@@ -98,6 +110,7 @@ export default function MedicationsPage() {
       dosage: newDosage || 'Dosagem padrão',
       time: newTime,
       instructions: newInstructions || 'Sem instruções adicionais',
+      caregiver_code: activeCaregiverCode || 'CF#7X9K',
     };
 
     if (isApiConnected) {
@@ -134,6 +147,25 @@ export default function MedicationsPage() {
   return (
     <div className="py-10 bg-slate-100 min-h-screen">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* Idoso Linkage Notice Banner */}
+        {isIdoso && linkedCaregiver && (
+          <div className="bg-emerald-800 text-white rounded-2xl p-5 mb-6 shadow-md border-2 border-emerald-950 flex items-center justify-between font-black text-lg">
+            <div className="flex items-center gap-3">
+              <span className="text-4xl">👵🔗🧑‍⚕️</span>
+              <div>
+                <p className="text-base text-emerald-200 uppercase font-extrabold tracking-wider">
+                  {idosoName ? `Olá, ${idosoName}!` : 'Perfil Vinculado'}
+                </p>
+                <p className="text-xl">Cuidador Responsável: <strong className="text-white underline">{linkedCaregiver.name}</strong></p>
+              </div>
+            </div>
+            <span className="bg-emerald-950 px-3.5 py-2 rounded-xl border border-emerald-600 text-sm font-black">
+              Código: {linkedCaregiver.code}
+            </span>
+          </div>
+        )}
+
         {/* Header */}
         <div className="text-center mb-10">
           <span className="px-4 py-1.5 bg-blue-800 text-white text-xs sm:text-sm font-black rounded-full uppercase tracking-wider border-2 border-blue-950">
@@ -155,16 +187,18 @@ export default function MedicationsPage() {
               Você tomou <strong className="text-amber-300 text-lg font-black">{takenCount}</strong> de <strong className="text-white text-lg font-black">{medications.length}</strong> medicamentos agendados.
             </p>
           </div>
-          <button
-            onClick={() => setShowAddForm(!showAddForm)}
-            className="w-full sm:w-auto px-6 py-3 bg-white text-slate-950 hover:bg-slate-100 font-black rounded-xl shadow-md text-base transition cursor-pointer border-2 border-slate-950"
-          >
-            {showAddForm ? 'Cancelar' : '+ Adicionar Remédio'}
-          </button>
+          {!isIdoso && (
+            <button
+              onClick={() => setShowAddForm(!showAddForm)}
+              className="w-full sm:w-auto px-6 py-3 bg-white text-slate-950 hover:bg-slate-100 font-black rounded-xl shadow-md text-base transition cursor-pointer border-2 border-slate-950"
+            >
+              {showAddForm ? 'Cancelar' : '+ Adicionar Remédio'}
+            </button>
+          )}
         </div>
 
-        {/* Add Medication Form */}
-        {showAddForm && (
+        {/* Add Medication Form (Caregiver only) */}
+        {!isIdoso && showAddForm && (
           <form onSubmit={handleAddMedication} className="bg-white p-6 rounded-2xl border-2 border-blue-600 shadow-xl mb-8 space-y-4">
             <h3 className="text-xl font-black text-slate-950">Cadastrar Novo Medicamento</h3>
             
@@ -236,7 +270,7 @@ export default function MedicationsPage() {
           <div className="space-y-4">
             {medications.length === 0 ? (
               <div className="bg-white p-8 rounded-2xl text-center border-2 border-slate-300 text-slate-800 font-bold text-lg">
-                Nenhum medicamento cadastrado ainda. Clique em <strong>+ Adicionar Remédio</strong>.
+                Nenhum medicamento cadastrado ainda para este cuidador.
               </div>
             ) : (
               medications.map((med) => (
@@ -287,15 +321,17 @@ export default function MedicationsPage() {
                       {med.taken ? '✓ Tomado' : 'Marcar como Tomado'}
                     </button>
 
-                    <button
-                      onClick={() => handleDelete(med.id)}
-                      className="p-2.5 text-slate-700 hover:text-red-700 hover:bg-red-100 rounded-xl transition cursor-pointer border border-slate-300"
-                      title="Remover"
-                    >
-                      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                    </button>
+                    {!isIdoso && (
+                      <button
+                        onClick={() => handleDelete(med.id)}
+                        className="p-2.5 text-slate-700 hover:text-red-700 hover:bg-red-100 rounded-xl transition cursor-pointer border border-slate-300"
+                        title="Remover"
+                      >
+                        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
+                    )}
                   </div>
                 </div>
               ))

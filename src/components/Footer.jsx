@@ -6,8 +6,6 @@ export default function Footer({ onNavigate }) {
     { id: 'exercises', label: 'Exercícios' },
     { id: 'medications', label: 'Medicamentos' },
     { id: 'events', label: 'Eventos' },
-    { id: 'about', label: 'Sobre' },
-    { id: 'contact', label: 'Contato' },
   ];
 
   return (

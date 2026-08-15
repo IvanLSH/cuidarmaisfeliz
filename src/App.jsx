@@ -4,16 +4,15 @@ import Footer from './components/Footer';
 
 import RoleSelectionPage from './pages/RoleSelectionPage';
 import LoginPage from './pages/LoginPage';
+import IdosoLinkPage from './pages/IdosoLinkPage';
 import HomePage from './pages/HomePage';
 import ExercisesPage from './pages/ExercisesPage';
 import MedicationsPage from './pages/MedicationsPage';
 import EventsPage from './pages/EventsPage';
-import AboutPage from './pages/AboutPage';
-import ContactPage from './pages/ContactPage';
 
 import { clearToken } from './api';
 
-// app states: null → role selection | 'cuidador_login' → login screen | 'idoso' / 'cuidador' → app
+// app states: null → role selection | 'cuidador_login' → login screen | 'idoso_link' → idoso code screen | 'idoso' / 'cuidador' → app
 export default function App() {
   const [appState, setAppState] = useState(() => {
     return localStorage.getItem('cuidado_feliz_role') || null;
@@ -26,9 +25,7 @@ export default function App() {
     if (role === 'cuidador') {
       setAppState('cuidador_login'); // go to login screen first
     } else {
-      // Idosos go straight in
-      setAppState('idoso');
-      localStorage.setItem('cuidado_feliz_role', 'idoso');
+      setAppState('idoso_link'); // go to caregiver code entry screen first
     }
   };
 
@@ -36,6 +33,12 @@ export default function App() {
   const handleLoginSuccess = () => {
     setAppState('cuidador');
     localStorage.setItem('cuidado_feliz_role', 'cuidador');
+  };
+
+  // Called from IdosoLinkPage on success
+  const handleIdosoLinkSuccess = () => {
+    setAppState('idoso');
+    localStorage.setItem('cuidado_feliz_role', 'idoso');
   };
 
   // Called from anywhere to reset to role selection
@@ -66,6 +69,16 @@ export default function App() {
     );
   }
 
+  // ── Idoso Caregiver Code Linkage ──
+  if (appState === 'idoso_link') {
+    return (
+      <IdosoLinkPage
+        onLinkSuccess={handleIdosoLinkSuccess}
+        onBack={() => setAppState(null)}
+      />
+    );
+  }
+
   // ── App (idoso or cuidador) ──
   const userRole = appState; // 'idoso' or 'cuidador'
   const isIdoso = userRole === 'idoso';
@@ -76,8 +89,6 @@ export default function App() {
       case 'exercises':  return <ExercisesPage userRole={userRole} />;
       case 'medications':return <MedicationsPage userRole={userRole} />;
       case 'events':     return <EventsPage userRole={userRole} />;
-      case 'about':      return <AboutPage userRole={userRole} />;
-      case 'contact':    return <ContactPage userRole={userRole} />;
       default:           return <HomePage onNavigate={setActivePage} userRole={userRole} />;
     }
   };

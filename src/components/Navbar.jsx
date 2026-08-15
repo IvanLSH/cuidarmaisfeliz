@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { getLoggedInCaregiver, getLinkedCaregiver, getIdosoName } from '../api';
 
 const PAGE_COLORS = {
   exercises: {
@@ -20,14 +21,17 @@ const DEFAULT_HOVER = 'hover:text-slate-600';
 
 export default function Navbar({ activePage, onNavigate, userRole, onChangeRole }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const caregiverInfo = getLoggedInCaregiver();
+  const linkedCaregiver = getLinkedCaregiver();
+  const idosoName = getIdosoName();
 
   const navItems = [
     { id: 'home', label: 'Início' },
     { id: 'exercises', label: 'Exercícios' },
     { id: 'medications', label: 'Medicamentos' },
     { id: 'events', label: 'Eventos' },
-    { id: 'about', label: 'Sobre' },
-    { id: 'contact', label: 'Contato' },
   ];
 
   const handleNav = (id) => {
@@ -36,6 +40,13 @@ export default function Navbar({ activePage, onNavigate, userRole, onChangeRole 
   };
 
   const isIdoso = userRole === 'idoso';
+
+  const handleCopyCode = () => {
+    const codeToCopy = caregiverInfo?.code || 'CF#7X9K';
+    navigator.clipboard.writeText(codeToCopy);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const getActiveStyle = (id) => {
     if (activePage !== id) return '';
@@ -46,7 +57,6 @@ export default function Navbar({ activePage, onNavigate, userRole, onChangeRole 
     return PAGE_COLORS[id]?.hover || DEFAULT_HOVER;
   };
 
-  // Mobile active background per page
   const getMobileActiveStyle = (id) => {
     if (activePage !== id) return 'text-slate-900 bg-slate-100 hover:bg-slate-200';
     const map = {
@@ -98,8 +108,25 @@ export default function Navbar({ activePage, onNavigate, userRole, onChangeRole 
             ))}
           </nav>
 
-          {/* Role Switcher (Desktop) */}
+          {/* Caregiver Code / Linked Caregiver Badge & Role Switcher */}
           <div className="hidden md:flex items-center space-x-3">
+            {!isIdoso && (
+              <button
+                onClick={handleCopyCode}
+                title="Clique para copiar seu código de vínculo para o idoso"
+                className="px-3.5 py-2 rounded-xl bg-blue-100 border-2 border-blue-400 text-blue-950 text-xs font-black flex items-center gap-1.5 cursor-pointer hover:bg-blue-200 transition"
+              >
+                <span>🔑 Código: <strong className="text-blue-900 text-sm font-black">{caregiverInfo?.code || 'CF#7X9K'}</strong></span>
+                <span className="text-blue-700 text-xs">{copied ? '✓ Copiado!' : '📋'}</span>
+              </button>
+            )}
+
+            {isIdoso && (
+              <div className="px-3.5 py-1.5 rounded-xl bg-emerald-100 border-2 border-emerald-400 text-emerald-950 text-sm font-black flex items-center gap-1.5">
+                <span>👵 {idosoName || 'Idoso'} {linkedCaregiver ? `(🔗 Cuidador: ${linkedCaregiver.name})` : ''}</span>
+              </div>
+            )}
+
             <button
               onClick={onChangeRole}
               title="Clique para alternar o perfil de acesso"
@@ -116,12 +143,22 @@ export default function Navbar({ activePage, onNavigate, userRole, onChangeRole 
 
           {/* Mobile: Role badge + Hamburger */}
           <div className="md:hidden flex items-center space-x-2">
+            {!isIdoso && (
+              <button
+                onClick={handleCopyCode}
+                className="px-2.5 py-1 rounded-lg bg-blue-100 border-2 border-blue-400 text-blue-950 text-xs font-black"
+              >
+                🔑 {caregiverInfo?.code || 'CF#7X9K'}
+              </button>
+            )}
+
             <button
               onClick={onChangeRole}
               className="px-3 py-1.5 rounded-lg bg-slate-100 border-2 border-slate-400 text-slate-900 text-xs font-black"
             >
-              {isIdoso ? '👵 Idoso' : '🧑‍⚕️ Cuidador'}
+              {isIdoso ? (idosoName ? `👵 ${idosoName}` : '👵 Idoso') : '🧑‍⚕️ Cuidador'}
             </button>
+
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               type="button"
