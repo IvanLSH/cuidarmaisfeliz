@@ -10,8 +10,6 @@ import ExercisesPage from './pages/ExercisesPage';
 import MedicationsPage from './pages/MedicationsPage';
 import EventsPage from './pages/EventsPage';
 import ChatPage from './pages/ChatPage';
-import PanicModal from './components/PanicModal';
-import PanicButton from './components/PanicButton';
 
 import { clearToken } from './api';
 
@@ -103,9 +101,6 @@ export default function App() {
       </main>
 
       <Footer onNavigate={setActivePage} userRole={userRole} />
-
-      <PanicModal userRole={userRole} />
-      <PanicButton userRole={userRole} />
     </div>
   );
 }
