@@ -44,7 +44,7 @@ const DEFAULT_EVENTS = [
   },
 ];
 
-export default function EventsPage() {
+export default function EventsPage({ onNavigate }) {
   const [events, setEvents] = useState(DEFAULT_EVENTS);
   const [confirmedEvents, setConfirmedEvents] = useState({});
 
@@ -146,6 +146,17 @@ export default function EventsPage() {
             );
           })}
         </div>
+
+        {/* Return to Home Button */}
+        <div className="mt-12 text-center">
+          <button
+            onClick={() => onNavigate && onNavigate('home')}
+            className="px-8 py-4 bg-slate-900 hover:bg-slate-950 text-white font-black text-lg rounded-2xl shadow-lg border-2 border-slate-950 transition cursor-pointer inline-flex items-center gap-2"
+          >
+            <span>← Voltar à Página Inicial</span>
+          </button>
+        </div>
+
       </div>
     </div>
   );

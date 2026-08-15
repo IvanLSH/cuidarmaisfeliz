@@ -41,7 +41,7 @@ const DEFAULT_MEDS = [
   },
 ];
 
-export default function MedicationsPage({ userRole }) {
+export default function MedicationsPage({ userRole, onNavigate }) {
   const [medications, setMedications] = useState(DEFAULT_MEDS);
   const [idososList, setIdososList] = useState([]);
   const [selectedIdosoCode, setSelectedIdosoCode] = useState('');
@@ -398,6 +398,17 @@ export default function MedicationsPage({ userRole }) {
             )}
           </div>
         )}
+
+        {/* Return to Home Button */}
+        <div className="mt-12 text-center">
+          <button
+            onClick={() => onNavigate && onNavigate('home')}
+            className="px-8 py-4 bg-slate-900 hover:bg-slate-950 text-white font-black text-lg rounded-2xl shadow-lg border-2 border-slate-950 transition cursor-pointer inline-flex items-center gap-2"
+          >
+            <span>← Voltar à Página Inicial</span>
+          </button>
+        </div>
+
       </div>
     </div>
   );

@@ -86,9 +86,9 @@ export default function App() {
   const renderPage = () => {
     switch (activePage) {
       case 'home':       return <HomePage onNavigate={setActivePage} userRole={userRole} />;
-      case 'exercises':  return <ExercisesPage userRole={userRole} />;
-      case 'medications':return <MedicationsPage userRole={userRole} />;
-      case 'events':     return <EventsPage userRole={userRole} />;
+      case 'exercises':  return <ExercisesPage onNavigate={setActivePage} userRole={userRole} />;
+      case 'medications':return <MedicationsPage onNavigate={setActivePage} userRole={userRole} />;
+      case 'events':     return <EventsPage onNavigate={setActivePage} userRole={userRole} />;
       default:           return <HomePage onNavigate={setActivePage} userRole={userRole} />;
     }
   };
