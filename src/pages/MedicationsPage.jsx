@@ -6,7 +6,9 @@ import {
   deleteMedication,
   getLoggedInCaregiver,
   getLinkedCaregiver,
+  getLoggedInIdoso,
   getIdosoName,
+  getIdososByCaregiver,
 } from '../api';
 
 const DEFAULT_MEDS = [
@@ -17,6 +19,7 @@ const DEFAULT_MEDS = [
     time: '08:00',
     instructions: 'Tomar com água após o café da manhã',
     taken: true,
+    idoso_name: 'Dona Maria da Silva',
   },
   {
     id: 2,
@@ -25,6 +28,7 @@ const DEFAULT_MEDS = [
     time: '12:00',
     instructions: 'Junto com o almoço',
     taken: false,
+    idoso_name: 'Dona Maria da Silva',
   },
   {
     id: 3,
@@ -33,30 +37,38 @@ const DEFAULT_MEDS = [
     time: '20:00',
     instructions: 'Antes de dormir',
     taken: false,
+    idoso_name: 'Dona Maria da Silva',
   },
 ];
 
 export default function MedicationsPage({ userRole }) {
   const [medications, setMedications] = useState(DEFAULT_MEDS);
+  const [idososList, setIdososList] = useState([]);
+  const [selectedIdosoCode, setSelectedIdosoCode] = useState('');
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
+
+  // Form fields
   const [newName, setNewName] = useState('');
   const [newDosage, setNewDosage] = useState('');
   const [newTime, setNewTime] = useState('');
   const [newInstructions, setNewInstructions] = useState('');
+  const [assignedIdosoCode, setAssignedIdosoCode] = useState('');
   const [isApiConnected, setIsApiConnected] = useState(false);
 
   const isIdoso = userRole === 'idoso';
   const caregiverInfo = getLoggedInCaregiver();
   const linkedCaregiver = getLinkedCaregiver();
+  const loggedInIdoso = getLoggedInIdoso();
   const idosoName = getIdosoName();
   const activeCaregiverCode = isIdoso ? linkedCaregiver?.code : caregiverInfo?.code;
+  const activeIdosoCode = isIdoso ? loggedInIdoso?.code : null;
 
-  // Fetch medications from API on mount
+  // Fetch medications & idosos list on mount
   useEffect(() => {
     async function loadData() {
       try {
-        const data = await getMedications(activeCaregiverCode);
+        const data = await getMedications(activeCaregiverCode, activeIdosoCode);
         if (data) {
           setMedications(data);
           setIsApiConnected(true);
@@ -66,9 +78,21 @@ export default function MedicationsPage({ userRole }) {
       } finally {
         setLoading(false);
       }
+
+      if (!isIdoso) {
+        try {
+          const list = await getIdososByCaregiver(activeCaregiverCode);
+          setIdososList(list);
+          if (list.length > 0) {
+            setAssignedIdosoCode(list[0].code);
+          }
+        } catch (err) {
+          console.warn('Erro ao buscar lista de idosos:', err);
+        }
+      }
     }
     loadData();
-  }, [activeCaregiverCode]);
+  }, [activeCaregiverCode, activeIdosoCode, isIdoso]);
 
   const handleToggleTaken = async (id) => {
     const med = medications.find(m => m.id === id);
@@ -105,12 +129,16 @@ export default function MedicationsPage({ userRole }) {
     e.preventDefault();
     if (!newName || !newTime) return;
 
+    const selectedIdoso = idososList.find(i => i.code === assignedIdosoCode);
+
     const payload = {
       name: newName,
       dosage: newDosage || 'Dosagem padrão',
       time: newTime,
       instructions: newInstructions || 'Sem instruções adicionais',
       caregiver_code: activeCaregiverCode || 'CF#7X9K',
+      idoso_code: assignedIdosoCode || null,
+      idoso_name: selectedIdoso ? selectedIdoso.name : 'Idoso',
     };
 
     if (isApiConnected) {
@@ -164,9 +192,11 @@ export default function MedicationsPage({ userRole }) {
                 <p className="text-xl">Cuidador Responsável: <strong className="text-white underline">{linkedCaregiver.name}</strong></p>
               </div>
             </div>
-            <span className="bg-emerald-950 px-3.5 py-2 rounded-xl border border-emerald-600 text-sm font-black">
-              Código: {linkedCaregiver.code}
-            </span>
+            {loggedInIdoso && (
+              <span className="bg-emerald-950 px-3.5 py-2 rounded-xl border border-emerald-600 text-sm font-black">
+                Seu Código: {loggedInIdoso.code}
+              </span>
+            )}
           </div>
         )}
 
@@ -208,6 +238,25 @@ export default function MedicationsPage({ userRole }) {
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
+                <label className="block text-sm font-extrabold text-slate-900 mb-1">Para qual idoso? *</label>
+                <select
+                  value={assignedIdosoCode}
+                  onChange={(e) => setAssignedIdosoCode(e.target.value)}
+                  className="w-full px-4 py-2.5 bg-white border-2 border-slate-400 rounded-xl text-base font-bold text-slate-950 focus:border-blue-700 outline-none"
+                >
+                  {idososList.length === 0 ? (
+                    <option value="">Nenhum idoso cadastrado ainda (Será genérico)</option>
+                  ) : (
+                    idososList.map((i) => (
+                      <option key={i.code} value={i.code}>
+                        {i.name} ({i.code})
+                      </option>
+                    ))
+                  )}
+                </select>
+              </div>
+
+              <div>
                 <label className="block text-sm font-extrabold text-slate-900 mb-1">Nome do Medicamento *</label>
                 <input
                   type="text"
@@ -241,7 +290,7 @@ export default function MedicationsPage({ userRole }) {
                 />
               </div>
 
-              <div>
+              <div className="sm:col-span-2">
                 <label className="block text-sm font-extrabold text-slate-900 mb-1">Instruções / Observações</label>
                 <input
                   type="text"
@@ -274,7 +323,7 @@ export default function MedicationsPage({ userRole }) {
           <div className="space-y-4">
             {medications.length === 0 ? (
               <div className="bg-white p-8 rounded-2xl text-center border-2 border-slate-300 text-slate-800 font-bold text-lg">
-                Nenhum medicamento cadastrado ainda para este cuidador.
+                Nenhum medicamento cadastrado ainda para este idoso.
               </div>
             ) : (
               medications.map((med) => (
@@ -302,13 +351,18 @@ export default function MedicationsPage({ userRole }) {
                     </div>
 
                     <div>
-                      <div className="flex items-center space-x-3">
+                      <div className="flex flex-wrap items-center gap-2">
                         <h3 className={`text-xl font-black ${med.taken ? 'line-through text-slate-600' : 'text-slate-950'}`}>
                           {med.name}
                         </h3>
                         <span className="text-xs font-black px-2.5 py-1 rounded-md bg-slate-200 text-slate-900 border border-slate-300">
                           {med.dosage}
                         </span>
+                        {!isIdoso && med.idoso_name && (
+                          <span className="text-xs font-black px-2.5 py-1 rounded-md bg-blue-100 text-blue-950 border border-blue-300">
+                            Idoso: {med.idoso_name}
+                          </span>
+                        )}
                       </div>
                       <p className="text-sm font-bold text-slate-800 mt-1">{med.instructions}</p>
                     </div>

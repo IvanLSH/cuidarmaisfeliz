@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { validateCaregiverCode } from '../api';
+import { validateIdosoCode } from '../api';
 
 export default function IdosoLinkPage({ onLinkSuccess, onBack }) {
-  const [idosoName, setIdosoName] = useState('');
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -11,33 +10,25 @@ export default function IdosoLinkPage({ onLinkSuccess, onBack }) {
     e.preventDefault();
     setError('');
 
-    if (!idosoName.trim()) {
-      setError('Por favor, digite seu nome ou como prefere ser chamado(a).');
-      return;
-    }
-    
     if (!code.trim()) {
-      setError('Por favor, digite o código do seu cuidador.');
+      setError('Por favor, digite seu código de idoso.');
       return;
     }
 
     setLoading(true);
 
     try {
-      const caregiver = await validateCaregiverCode(code, idosoName);
-      onLinkSuccess(caregiver);
+      const idosoUser = await validateIdosoCode(code);
+      onLinkSuccess(idosoUser);
     } catch (err) {
-      setError(err.message || 'Código não encontrado. Verifique com seu cuidador.');
+      setError(err.message || 'Código não encontrado. Solicite o código ao seu cuidador.');
     } finally {
       setLoading(false);
     }
   };
 
   const fillDemoCode = () => {
-    if (!idosoName) {
-      setIdosoName('Dona Maria');
-    }
-    setCode('CF#7X9K');
+    setCode('ID#9K2P');
     setError('');
   };
 
@@ -53,49 +44,31 @@ export default function IdosoLinkPage({ onLinkSuccess, onBack }) {
         </div>
 
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-950 tracking-tight">
-          Cadastro & Vinculação
+          Entrar como Idoso(a)
         </h1>
 
         <p className="mt-4 text-xl sm:text-2xl text-slate-900 font-extrabold leading-relaxed">
-          Preencha seu nome e digite o <strong className="text-emerald-900 underline">código de vinculação</strong> fornecido pelo seu cuidador ou familiar:
+          Digite o seu <strong className="text-emerald-900 underline">Código Pessoal de Idoso</strong> gerado pelo seu cuidador para entrar:
         </p>
 
-        {/* Code & Name Form */}
+        {/* Code Form */}
         <form onSubmit={handleSubmit} className="mt-8 space-y-6 text-left">
           
-          {/* Nome do Idoso */}
+          {/* Código do Idoso */}
           <div className="max-w-md mx-auto">
             <label className="block text-xl font-black text-slate-950 mb-2 text-center">
-              1. Seu Nome Completo ou Apelido *
+              Seu Código (Ex: ID#9K2P) *
             </label>
             <input
               type="text"
               required
-              placeholder="Ex: Dona Maria ou Seu João"
-              value={idosoName}
-              onChange={(e) => {
-                setIdosoName(e.target.value);
-                setError('');
-              }}
-              className="w-full text-center px-6 py-4 rounded-2xl border-4 border-slate-400 focus:border-emerald-600 bg-white text-slate-950 font-black text-2xl outline-none shadow-inner"
-            />
-          </div>
-
-          {/* Código do Cuidador */}
-          <div className="max-w-md mx-auto">
-            <label className="block text-xl font-black text-slate-950 mb-2 text-center">
-              2. Código do Cuidador (Ex: CF#7X9K) *
-            </label>
-            <input
-              type="text"
-              required
-              placeholder="CF#7X9K"
+              placeholder="ID#9K2P"
               value={code}
               onChange={(e) => {
                 setCode(e.target.value.toUpperCase());
                 setError('');
               }}
-              className="w-full text-center px-6 py-4 rounded-2xl border-4 border-slate-400 focus:border-emerald-600 bg-emerald-50 text-slate-950 font-black text-3xl tracking-widest outline-none uppercase shadow-inner"
+              className="w-full text-center px-6 py-5 rounded-2xl border-4 border-slate-400 focus:border-emerald-600 bg-emerald-50 text-slate-950 font-black text-3xl tracking-widest outline-none uppercase shadow-inner"
             />
           </div>
 
@@ -116,10 +89,10 @@ export default function IdosoLinkPage({ onLinkSuccess, onBack }) {
             className="w-full max-w-md mx-auto py-5 rounded-2xl bg-emerald-700 hover:bg-emerald-800 disabled:bg-emerald-400 text-white font-black text-2xl shadow-xl transition cursor-pointer border-4 border-emerald-950 flex items-center justify-center gap-3"
           >
             {loading ? (
-              'Verificando...'
+              'Entrando...'
             ) : (
               <>
-                <span>Confirmar e Entrar</span>
+                <span>Entrar no Aplicativo</span>
                 <span className="text-3xl">→</span>
               </>
             )}
@@ -136,7 +109,7 @@ export default function IdosoLinkPage({ onLinkSuccess, onBack }) {
             onClick={fillDemoCode}
             className="px-6 py-2.5 bg-emerald-800 hover:bg-emerald-900 text-white font-black text-base rounded-xl shadow cursor-pointer border border-emerald-950"
           >
-            Preencher Demo (Dona Maria / CF#7X9K)
+            Preencher Código Demo (Dona Maria / ID#9K2P)
           </button>
         </div>
 
