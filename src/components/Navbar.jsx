@@ -79,47 +79,38 @@ export default function Navbar({ activePage, onNavigate, userRole, onChangeRole 
             </span>
           </button>
 
-          {/* BOTTOM: Botões de Navegação e Ações */}
-          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 w-full">
-            
-
-            {/* Ações do Cuidador / Idoso */}
-            <div className="flex items-center gap-2">
-              {!isIdoso && (
-                <button
-                  onClick={() => setIsIdosoModalOpen(true)}
-                  className="px-3.5 py-2 rounded-xl bg-blue-100 hover:bg-blue-200 border border-blue-300 text-blue-950 text-xs sm:text-sm font-black transition cursor-pointer"
-                >
-                  + Cadastrar Idoso
-                </button>
-              )}
-
-              {isIdoso && (
-                <div className="px-3.5 py-2 rounded-xl bg-emerald-100 border border-emerald-300 text-emerald-950 text-xs sm:text-sm font-black">
-                  <span>{idosoName || 'Idoso'} {linkedCaregiver ? `(${linkedCaregiver.name})` : ''}</span>
-                </div>
-              )}
-
+          {/* Botões de Ação */}
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            {!isIdoso && (
               <button
-                onClick={onChangeRole}
-                title="Clique para alternar o perfil"
-                className={`px-3.5 py-2 rounded-xl border border-slate-300 font-extrabold transition flex items-center gap-1 cursor-pointer ${
-                  isIdoso
-                    ? 'bg-slate-100 text-slate-900 text-xs sm:text-sm hover:bg-slate-200'
-                    : 'bg-slate-100 text-slate-900 text-xs sm:text-sm hover:bg-slate-200'
-                }`}
+                onClick={() => setIsIdosoModalOpen(true)}
+                className="px-3.5 py-2 rounded-xl bg-blue-100 hover:bg-blue-200 border border-blue-300 text-blue-950 text-xs sm:text-sm font-black transition cursor-pointer"
               >
-                <span>{isIdoso ? 'Perfil: Idoso' : 'Perfil: Cuidador'}</span>
-                <svg className="w-3.5 h-3.5 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-                </svg>
+                + Cadastrar Idoso
               </button>
-            </div>
+            )}
 
+            {isIdoso && (
+              <div className="px-3.5 py-2 rounded-xl bg-emerald-100 border border-emerald-300 text-emerald-950 text-xs sm:text-sm font-black">
+                <span>{idosoName || 'Idoso'} {linkedCaregiver ? `(${linkedCaregiver.name})` : ''}</span>
+              </div>
+            )}
+
+            <button
+              onClick={onChangeRole}
+              title="Clique para alternar o perfil"
+              className="px-3.5 py-2 rounded-xl border border-slate-300 font-extrabold transition flex items-center gap-1 cursor-pointer bg-slate-100 text-slate-900 text-xs sm:text-sm hover:bg-slate-200"
+            >
+              <span>{isIdoso ? 'Perfil: Idoso' : 'Perfil: Cuidador'}</span>
+              <svg className="w-3.5 h-3.5 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+              </svg>
+            </button>
           </div>
 
         </div>
       </header>
+
 
       {/* Idoso Management Modal for Caregivers */}
       <IdosoManagementModal
