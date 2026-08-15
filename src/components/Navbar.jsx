@@ -57,7 +57,7 @@ export default function Navbar({ activePage, onNavigate, userRole, onChangeRole,
             <span className={`font-black text-slate-950 dark:text-white tracking-tight no-underline ${
               isIdoso ? 'text-2xl sm:text-3xl' : 'text-xl sm:text-2xl'
             }`}>
-              Cuidado+Feliz
+              Cuidar+Feliz
             </span>
           </button>
 

@@ -31,7 +31,7 @@ export default function RoleSelectionPage({ onSelectRole, darkMode, onToggleDark
         </div>
         
         <h1 className="text-3xl sm:text-4xl font-black text-slate-950 dark:text-white tracking-tight">
-          Bem-vindo ao Cuidado+Feliz
+          Bem-vindo ao Cuidar+Feliz
         </h1>
         
         <p className="mt-3 text-lg font-bold text-slate-800 dark:text-slate-300 max-w-lg mx-auto">
