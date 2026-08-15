@@ -74,11 +74,7 @@ export default function LoginPage({ onLoginSuccess, onBack }) {
     }
   };
 
-  const fillDemo = () => {
-    setEmail('cuidador@cuidadofeliz.com');
-    setPassword('cuidado123');
-    setError('');
-  };
+
 
   const switchTab = (toRegister) => {
     setIsRegistering(toRegister);
@@ -217,22 +213,6 @@ export default function LoginPage({ onLoginSuccess, onBack }) {
                   {loading ? 'Entrando...' : 'Entrar no Painel'}
                 </button>
 
-                {/* Demo Hint */}
-                <div className="mt-4 p-3.5 bg-slate-100 border-2 border-slate-300 rounded-xl">
-                  <p className="text-xs font-extrabold text-slate-700 uppercase tracking-wide">
-                    Demonstração rápida
-                  </p>
-                  <p className="text-xs text-slate-700 font-bold mt-1">
-                    E-mail: <span className="text-blue-900 font-black">cuidador@cuidadofeliz.com</span> | Senha: <span className="text-blue-900 font-black">cuidado123</span>
-                  </p>
-                  <button
-                    type="button"
-                    onClick={fillDemo}
-                    className="mt-1.5 text-xs font-black text-blue-800 hover:text-blue-950 underline cursor-pointer"
-                  >
-                    Preencher automaticamente →
-                  </button>
-                </div>
               </form>
             ) : (
               /* REGISTER FORM */

@@ -11,35 +11,7 @@ import {
   getIdososByCaregiver,
 } from '../api';
 
-const DEFAULT_MEDS = [
-  {
-    id: 1,
-    name: 'Losartana Potássica',
-    dosage: '50 mg',
-    time: '08:00',
-    instructions: 'Tomar com água após o café da manhã',
-    taken: true,
-    idoso_name: 'Dona Maria da Silva',
-  },
-  {
-    id: 2,
-    name: 'Vitamina D3',
-    dosage: '2.000 UI',
-    time: '12:00',
-    instructions: 'Junto com o almoço',
-    taken: false,
-    idoso_name: 'Dona Maria da Silva',
-  },
-  {
-    id: 3,
-    name: 'Sinvastatina',
-    dosage: '20 mg',
-    time: '20:00',
-    instructions: 'Antes de dormir',
-    taken: false,
-    idoso_name: 'Dona Maria da Silva',
-  },
-];
+const DEFAULT_MEDS = [];
 
 export default function MedicationsPage({ userRole, onNavigate }) {
   const [medications, setMedications] = useState(DEFAULT_MEDS);

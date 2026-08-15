@@ -80,20 +80,23 @@ export async function login(email, password) {
       if (error) throw new Error(error.message);
 
       if (data) {
-        if (!data.code) data.code = 'CF#7X9K';
+        if (!data.code) data.code = generateCaregiverCode();
         const { password_hash, ...userSession } = data;
         localStorage.setItem('cuidado_feliz_user', JSON.stringify(userSession));
         return userSession;
       }
     } catch (netErr) {
-      console.warn('Erro de rede Supabase no login, usando fallback local:', netErr.message);
+      console.warn('Erro de rede Supabase no login:', netErr.message);
     }
   }
 
-  if ((cleanEmail === 'cuidador@cuidadofeliz.com' && password === 'cuidado123') || cleanEmail.includes('cuidador')) {
-    const demoUser = { id: 1, name: 'Cuidador Demo', email: cleanEmail, code: 'CF#7X9K' };
-    localStorage.setItem('cuidado_feliz_user', JSON.stringify(demoUser));
-    return demoUser;
+  // Local user check
+  const savedUser = localStorage.getItem('cuidado_feliz_user');
+  if (savedUser) {
+    const user = JSON.parse(savedUser);
+    if (user.email === cleanEmail) {
+      return user;
+    }
   }
 
   throw new Error('E-mail ou senha incorretos. Verifique suas credenciais.');
@@ -132,9 +135,9 @@ export async function register(name, email, password) {
     }
   }
 
-  const demoUser = { id: Date.now(), name: name.trim(), email: cleanEmail, code: caregiverCode };
-  localStorage.setItem('cuidado_feliz_user', JSON.stringify(demoUser));
-  return demoUser;
+  const localUser = { id: Date.now(), name: name.trim(), email: cleanEmail, code: caregiverCode };
+  localStorage.setItem('cuidado_feliz_user', JSON.stringify(localUser));
+  return localUser;
 }
 
 // ─── Register Elderly Person (Cadastrar Idoso pelo Cuidador) ────────────────
@@ -142,7 +145,7 @@ export async function registerIdoso(name, caregiverCode, caregiverName) {
   const cleanName = name.trim();
   const idosoCode = generateIdosoCode();
   const cCode = caregiverCode || 'CF#7X9K';
-  const cName = caregiverName || 'Cuidador Demo';
+  const cName = caregiverName || 'Cuidador';
 
   // Check 3 idosos limit
   const existingList = await getIdososByCaregiver(cCode);
@@ -172,7 +175,7 @@ export async function registerIdoso(name, caregiverCode, caregiverName) {
     }
   }
 
-  // Fallback local storage list for demo mode
+  // Fallback local storage list
   const localList = JSON.parse(localStorage.getItem('cuidado_feliz_idosos_list') || '[]');
   const localIdoso = { id: Date.now(), ...newIdoso };
   localList.push(localIdoso);
@@ -181,20 +184,17 @@ export async function registerIdoso(name, caregiverCode, caregiverName) {
 }
 
 export async function getIdososByCaregiver(caregiverCode) {
-  const cCode = caregiverCode || 'CF#7X9K';
-  const defaultList = [
-    { id: 1, name: 'Dona Maria da Silva', code: 'ID#9K2P', caregiver_code: 'CF#7X9K', caregiver_name: 'Cuidador Demo' }
-  ];
+  if (!caregiverCode) return [];
 
   if (isSupabaseConfigured) {
     try {
       const { data, error } = await supabase
         .from('idosos')
         .select('*')
-        .eq('caregiver_code', cCode)
+        .eq('caregiver_code', caregiverCode)
         .order('id', { ascending: true });
 
-      if (!error && data && data.length > 0) return data;
+      if (!error && data) return data;
     } catch (netErr) {
       console.warn('Erro Supabase ao buscar idosos:', netErr.message);
     }
@@ -202,24 +202,15 @@ export async function getIdososByCaregiver(caregiverCode) {
 
   // Local storage check
   const localList = JSON.parse(localStorage.getItem('cuidado_feliz_idosos_list') || '[]');
-  const combined = [...defaultList, ...localList.filter(i => i.caregiver_code === cCode)];
-  return combined;
+  return localList.filter(i => i.caregiver_code === caregiverCode);
 }
 
 // ─── Validar / Entrar como Idoso pelo Código ─────────────────────────────────
 export async function validateIdosoCode(inputCode) {
   const cleanCode = (inputCode || '').trim().toUpperCase();
 
-  const demoIdosos = [
-    { id: 1, name: 'Dona Maria da Silva', code: 'ID#9K2P', caregiver_code: 'CF#7X9K', caregiver_name: 'Cuidador Demo' }
-  ];
-
-  // Match demo or injection fallback
-  if (cleanCode === 'ID#9K2P' || cleanCode === 'ID-DEMO' || cleanCode.includes('9K2P')) {
-    const demo = demoIdosos[0];
-    localStorage.setItem('cuidado_feliz_idoso_user', JSON.stringify(demo));
-    localStorage.setItem('cuidado_feliz_linked_caregiver', JSON.stringify({ id: 1, name: demo.caregiver_name, code: demo.caregiver_code }));
-    return demo;
+  if (!cleanCode) {
+    throw new Error('Por favor, informe um código de idoso válido.');
   }
 
   if (isSupabaseConfigured) {
@@ -247,14 +238,6 @@ export async function validateIdosoCode(inputCode) {
     localStorage.setItem('cuidado_feliz_idoso_user', JSON.stringify(match));
     localStorage.setItem('cuidado_feliz_linked_caregiver', JSON.stringify({ name: match.caregiver_name, code: match.caregiver_code }));
     return match;
-  }
-
-  // Graceful fallback for any ID# prefix in demo testing
-  if (cleanCode.startsWith('ID#') || cleanCode.startsWith('ID-')) {
-    const demo = demoIdosos[0];
-    localStorage.setItem('cuidado_feliz_idoso_user', JSON.stringify(demo));
-    localStorage.setItem('cuidado_feliz_linked_caregiver', JSON.stringify({ id: 1, name: demo.caregiver_name, code: demo.caregiver_code }));
-    return demo;
   }
 
   throw new Error('Código de idoso não encontrado. Verifique se o cuidador já criou seu cadastro.');
@@ -354,7 +337,7 @@ export async function getEvents() {
         .select('*')
         .order('id', { ascending: true });
 
-      if (!error && data && data.length > 0) return data;
+      if (!error && data) return data;
     } catch (err) {
       console.warn('Erro ao consultar eventos no Supabase:', err.message);
     }
@@ -371,7 +354,7 @@ export async function getExercises(category) {
         query = query.eq('category', category);
       }
       const { data, error } = await query;
-      if (!error && data && data.length > 0) return data;
+      if (!error && data) return data;
     } catch (err) {
       console.warn('Erro ao consultar exercícios no Supabase:', err.message);
     }
@@ -380,12 +363,6 @@ export async function getExercises(category) {
 }
 
 // ─── Chat ──────────────────────────────────────────────────────────────────────
-const DEMO_MESSAGES = [
-  { id: 1, caregiver_code: 'CF#7X9K', idoso_code: 'ID#9K2P', sender_role: 'cuidador', sender_name: 'Cuidador Demo', content: 'Bom dia, Dona Maria! Como a senhora está se sentindo hoje?', created_at: new Date(Date.now() - 60000 * 30).toISOString() },
-  { id: 2, caregiver_code: 'CF#7X9K', idoso_code: 'ID#9K2P', sender_role: 'idoso',    sender_name: 'Dona Maria da Silva', content: 'Bom dia! Estou bem, obrigada. Tomei o remédio das 8h.', created_at: new Date(Date.now() - 60000 * 20).toISOString() },
-  { id: 3, caregiver_code: 'CF#7X9K', idoso_code: 'ID#9K2P', sender_role: 'cuidador', sender_name: 'Cuidador Demo', content: 'Que ótimo! Não esqueça de tomar o da vitamina D no almoço.', created_at: new Date(Date.now() - 60000 * 10).toISOString() },
-];
-
 function chatLocalKey(caregiverCode, idosoCode) {
   return `cuidado_feliz_chat_${caregiverCode}_${idosoCode}`;
 }
@@ -393,13 +370,7 @@ function chatLocalKey(caregiverCode, idosoCode) {
 function getLocalMessages(caregiverCode, idosoCode) {
   const key = chatLocalKey(caregiverCode, idosoCode);
   const stored = localStorage.getItem(key);
-  if (stored) return JSON.parse(stored);
-  // Seed demo messages once
-  if (caregiverCode === 'CF#7X9K' && idosoCode === 'ID#9K2P') {
-    localStorage.setItem(key, JSON.stringify(DEMO_MESSAGES));
-    return DEMO_MESSAGES;
-  }
-  return [];
+  return stored ? JSON.parse(stored) : [];
 }
 
 function saveLocalMessages(caregiverCode, idosoCode, messages) {
@@ -407,6 +378,8 @@ function saveLocalMessages(caregiverCode, idosoCode, messages) {
 }
 
 export async function getChatMessages(caregiverCode, idosoCode) {
+  if (!caregiverCode || !idosoCode) return [];
+
   if (isSupabaseConfigured) {
     try {
       const { data, error } = await supabase
@@ -453,5 +426,80 @@ export async function sendChatMessage(caregiverCode, idosoCode, senderRole, send
   existing.push(localMsg);
   saveLocalMessages(caregiverCode, idosoCode, existing);
   return localMsg;
+}
+
+// ─── Panic / Emergency Alerts ──────────────────────────────────────────────────
+export async function triggerPanicAlert(caregiverCode, idosoCode, idosoName) {
+  const alertData = {
+    caregiver_code: caregiverCode,
+    idoso_code: idosoCode,
+    idoso_name: idosoName || 'Idoso',
+    active: true,
+    created_at: new Date().toISOString(),
+  };
+
+  if (isSupabaseConfigured) {
+    try {
+      const { data, error } = await supabase
+        .from('panic_alerts')
+        .insert([alertData])
+        .select()
+        .single();
+      if (!error && data) return data;
+    } catch (err) {
+      console.warn('Erro Supabase pânico:', err.message);
+    }
+  }
+
+  // Local storage fallback
+  const key = `cuidado_feliz_panic_${caregiverCode}`;
+  const localAlert = { id: Date.now(), ...alertData };
+  localStorage.setItem(key, JSON.stringify(localAlert));
+  return localAlert;
+}
+
+export async function getActivePanicAlert(caregiverCode) {
+  if (!caregiverCode) return null;
+
+  if (isSupabaseConfigured) {
+    try {
+      const { data, error } = await supabase
+        .from('panic_alerts')
+        .select('*')
+        .eq('caregiver_code', caregiverCode)
+        .eq('active', true)
+        .order('created_at', { ascending: false })
+        .maybeSingle();
+
+      if (!error && data) return data;
+    } catch (err) {
+      console.warn('Erro Supabase buscando pânico:', err.message);
+    }
+  }
+
+  const key = `cuidado_feliz_panic_${caregiverCode}`;
+  const stored = localStorage.getItem(key);
+  if (stored) {
+    const alert = JSON.parse(stored);
+    if (alert && alert.active) return alert;
+  }
+  return null;
+}
+
+export async function dismissPanicAlert(alertId, caregiverCode) {
+  if (isSupabaseConfigured && alertId) {
+    try {
+      await supabase
+        .from('panic_alerts')
+        .update({ active: false })
+        .eq('id', alertId);
+    } catch (err) {
+      console.warn('Erro Supabase fechar pânico:', err.message);
+    }
+  }
+
+  const key = `cuidado_feliz_panic_${caregiverCode}`;
+  localStorage.removeItem(key);
+  return true;
 }
 

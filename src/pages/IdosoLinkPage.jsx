@@ -27,10 +27,7 @@ export default function IdosoLinkPage({ onLinkSuccess, onBack }) {
     }
   };
 
-  const fillDemoCode = () => {
-    setCode('ID#9K2P');
-    setError('');
-  };
+
 
   return (
     <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4 sm:p-6 lg:p-8">
@@ -99,19 +96,7 @@ export default function IdosoLinkPage({ onLinkSuccess, onBack }) {
           </button>
         </form>
 
-        {/* Demo Helper Button */}
-        <div className="mt-8 p-4 bg-emerald-50 border-2 border-emerald-400 rounded-2xl max-w-md mx-auto">
-          <p className="text-base font-extrabold text-emerald-950 mb-2">
-            Está testando o aplicativo?
-          </p>
-          <button
-            type="button"
-            onClick={fillDemoCode}
-            className="px-6 py-2.5 bg-emerald-800 hover:bg-emerald-900 text-white font-black text-base rounded-xl shadow cursor-pointer border border-emerald-950"
-          >
-            Preencher Código Demo (Dona Maria / ID#9K2P)
-          </button>
-        </div>
+
 
         {/* Back Button */}
         <div className="mt-8">
