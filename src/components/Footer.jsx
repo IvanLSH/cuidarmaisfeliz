@@ -17,8 +17,10 @@ export default function Footer({ onNavigate }) {
             onClick={() => onNavigate('home')}
             className="flex items-center space-x-3 cursor-pointer"
           >
-            <div className="w-9 h-9 rounded-xl bg-emerald-700 flex items-center justify-center text-white font-bold text-xl shadow-md">
-              👵
+            <div className="w-9 h-9 rounded-xl bg-emerald-700 flex items-center justify-center text-white font-bold shadow-md">
+              <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.646a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
             </div>
             <span className="text-xl font-extrabold text-white tracking-tight">
               Cuidado+Feliz

@@ -46,8 +46,10 @@ export default function IdosoLinkPage({ onLinkSuccess, onBack }) {
       <div className="max-w-2xl w-full bg-white rounded-3xl border-4 border-emerald-600 shadow-2xl p-6 sm:p-10 text-center">
         
         {/* Header Icon & Title */}
-        <div className="w-20 h-20 rounded-2xl bg-emerald-700 text-white flex items-center justify-center text-5xl font-black mx-auto mb-4 shadow-lg">
-          👵
+        <div className="w-20 h-20 rounded-2xl bg-emerald-700 text-white flex items-center justify-center font-black mx-auto mb-4 shadow-lg">
+          <svg className="w-11 h-11 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
         </div>
 
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-950 tracking-tight">
@@ -100,7 +102,9 @@ export default function IdosoLinkPage({ onLinkSuccess, onBack }) {
           {/* Error Message */}
           {error && (
             <div className="max-w-md mx-auto p-4 bg-red-100 border-4 border-red-500 text-red-950 rounded-2xl text-lg font-black flex items-center justify-center gap-2 text-center">
-              <span className="text-2xl">⚠️</span>
+              <svg className="w-6 h-6 text-red-700 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
               {error}
             </div>
           )}
@@ -125,7 +129,7 @@ export default function IdosoLinkPage({ onLinkSuccess, onBack }) {
         {/* Demo Helper Button */}
         <div className="mt-8 p-4 bg-emerald-50 border-2 border-emerald-400 rounded-2xl max-w-md mx-auto">
           <p className="text-base font-extrabold text-emerald-950 mb-2">
-            💡 Está testando o aplicativo?
+            Está testando o aplicativo?
           </p>
           <button
             type="button"

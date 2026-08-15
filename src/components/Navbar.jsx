@@ -78,9 +78,11 @@ export default function Navbar({ activePage, onNavigate, userRole, onChangeRole 
             className="flex items-center space-x-3 cursor-pointer text-left"
           >
             <div className={`rounded-xl bg-slate-900 flex items-center justify-center text-white font-bold shadow-md ${
-              isIdoso ? 'w-11 h-11 text-2xl' : 'w-9 h-9 text-xl'
+              isIdoso ? 'w-11 h-11' : 'w-9 h-9'
             }`}>
-              👵
+              <svg className={isIdoso ? 'w-7 h-7' : 'w-5 h-5'} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.646a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
             </div>
             <span className={`font-extrabold text-slate-950 tracking-tight ${
               isIdoso ? 'text-2xl sm:text-3xl' : 'text-xl'
@@ -116,14 +118,14 @@ export default function Navbar({ activePage, onNavigate, userRole, onChangeRole 
                 title="Clique para copiar seu código de vínculo para o idoso"
                 className="px-3.5 py-2 rounded-xl bg-blue-100 border-2 border-blue-400 text-blue-950 text-xs font-black flex items-center gap-1.5 cursor-pointer hover:bg-blue-200 transition"
               >
-                <span>🔑 Código: <strong className="text-blue-900 text-sm font-black">{caregiverInfo?.code || 'CF#7X9K'}</strong></span>
-                <span className="text-blue-700 text-xs">{copied ? '✓ Copiado!' : '📋'}</span>
+                <span>Código: <strong className="text-blue-900 text-sm font-black">{caregiverInfo?.code || 'CF#7X9K'}</strong></span>
+                <span className="text-blue-700 text-xs">{copied ? '✓ Copiado!' : 'Copiar'}</span>
               </button>
             )}
 
             {isIdoso && (
               <div className="px-3.5 py-1.5 rounded-xl bg-emerald-100 border-2 border-emerald-400 text-emerald-950 text-sm font-black flex items-center gap-1.5">
-                <span>👵 {idosoName || 'Idoso'} {linkedCaregiver ? `(🔗 Cuidador: ${linkedCaregiver.name})` : ''}</span>
+                <span>{idosoName || 'Idoso'} {linkedCaregiver ? `(Cuidador: ${linkedCaregiver.name})` : ''}</span>
               </div>
             )}
 
@@ -136,8 +138,10 @@ export default function Navbar({ activePage, onNavigate, userRole, onChangeRole 
                   : 'bg-slate-100 text-slate-900 border-slate-400 text-sm hover:bg-slate-200'
               }`}
             >
-              <span>{isIdoso ? '👵 Idoso' : '🧑‍⚕️ Cuidador'}</span>
-              <span className="text-slate-500 text-xs">🔄</span>
+              <span>{isIdoso ? 'Perfil: Idoso' : 'Perfil: Cuidador'}</span>
+              <svg className="w-4 h-4 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+              </svg>
             </button>
           </div>
 
@@ -148,7 +152,7 @@ export default function Navbar({ activePage, onNavigate, userRole, onChangeRole 
                 onClick={handleCopyCode}
                 className="px-2.5 py-1 rounded-lg bg-blue-100 border-2 border-blue-400 text-blue-950 text-xs font-black"
               >
-                🔑 {caregiverInfo?.code || 'CF#7X9K'}
+                {caregiverInfo?.code || 'CF#7X9K'}
               </button>
             )}
 
@@ -156,7 +160,7 @@ export default function Navbar({ activePage, onNavigate, userRole, onChangeRole 
               onClick={onChangeRole}
               className="px-3 py-1.5 rounded-lg bg-slate-100 border-2 border-slate-400 text-slate-900 text-xs font-black"
             >
-              {isIdoso ? (idosoName ? `👵 ${idosoName}` : '👵 Idoso') : '🧑‍⚕️ Cuidador'}
+              {isIdoso ? (idosoName || 'Idoso') : 'Cuidador'}
             </button>
 
             <button

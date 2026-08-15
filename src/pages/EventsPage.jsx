@@ -115,13 +115,13 @@ export default function EventsPage() {
 
                   <div className="space-y-2 text-sm text-slate-900 bg-slate-100 p-4 rounded-xl border-2 border-slate-200 font-bold">
                     <div className="flex items-center gap-2">
-                      <span className="font-black text-slate-950">📅 Data:</span> {event.date}
+                      <span className="font-black text-slate-950">Data:</span> {event.date}
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="font-black text-slate-950">⏰ Horário:</span> {event.time}
+                      <span className="font-black text-slate-950">Horário:</span> {event.time}
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="font-black text-slate-950">📍 Local:</span> {event.location}
+                      <span className="font-black text-slate-950">Local:</span> {event.location}
                     </div>
                   </div>
                 </div>
@@ -129,7 +129,7 @@ export default function EventsPage() {
                 {/* Footer Action */}
                 <div className="px-6 py-4 bg-slate-100 border-t-2 border-slate-200 flex items-center justify-between">
                   <span className="text-sm font-bold text-slate-900">
-                    {isConfirmed ? '✅ Presença Confirmada' : 'Ainda não confirmado'}
+                    {isConfirmed ? 'Presença Confirmada' : 'Ainda não confirmado'}
                   </span>
                   <button
                     onClick={() => toggleRSVP(event.id)}
@@ -139,7 +139,7 @@ export default function EventsPage() {
                         : 'bg-purple-800 text-white border-purple-950 hover:bg-purple-900 shadow'
                     }`}
                   >
-                    {isConfirmed ? 'Confirmado ✓' : 'Confirmar Presença'}
+                    {isConfirmed ? 'Confirmado' : 'Confirmar Presença'}
                   </button>
                 </div>
               </div>

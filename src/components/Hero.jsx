@@ -25,19 +25,19 @@ export default function Hero({ onNavigate }) {
             onClick={() => onNavigate('exercises')}
             className="w-full sm:w-auto px-8 py-4 rounded-xl bg-red-700 hover:bg-red-800 text-white font-extrabold text-lg shadow-md transition-all text-center cursor-pointer border-2 border-red-950"
           >
-            🏃 Ver Exercícios
+            Ver Exercícios
           </button>
           <button
             onClick={() => onNavigate('medications')}
             className="w-full sm:w-auto px-8 py-4 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-extrabold text-lg shadow-md transition-all text-center cursor-pointer border-2 border-blue-950"
           >
-            💊 Meus Remédios
+            Meus Remédios
           </button>
           <button
             onClick={() => onNavigate('events')}
             className="w-full sm:w-auto px-8 py-4 rounded-xl bg-purple-700 hover:bg-purple-800 text-white font-extrabold text-lg shadow-md transition-all text-center cursor-pointer border-2 border-purple-950"
           >
-            📅 Ver Eventos
+            Ver Eventos
           </button>
         </div>
       </div>

@@ -152,7 +152,11 @@ export default function MedicationsPage({ userRole }) {
         {isIdoso && linkedCaregiver && (
           <div className="bg-emerald-800 text-white rounded-2xl p-5 mb-6 shadow-md border-2 border-emerald-950 flex items-center justify-between font-black text-lg">
             <div className="flex items-center gap-3">
-              <span className="text-4xl">👵🔗🧑‍⚕️</span>
+              <div className="w-12 h-12 rounded-xl bg-emerald-900 flex items-center justify-center shrink-0 border border-emerald-700">
+                <svg className="w-7 h-7 text-emerald-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                </svg>
+              </div>
               <div>
                 <p className="text-base text-emerald-200 uppercase font-extrabold tracking-wider">
                   {idosoName ? `Olá, ${idosoName}!` : 'Perfil Vinculado'}
@@ -291,7 +295,9 @@ export default function MedicationsPage({ userRole }) {
                           : 'bg-amber-100 text-amber-950 border-amber-400'
                       }`}
                     >
-                      <span className="text-lg">⏰</span>
+                      <svg className="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
                       <span className="text-sm font-black">{med.time}</span>
                     </div>
 
@@ -318,7 +324,7 @@ export default function MedicationsPage({ userRole }) {
                           : 'bg-amber-500 text-slate-950 border-amber-600 hover:bg-amber-600'
                       }`}
                     >
-                      {med.taken ? '✓ Tomado' : 'Marcar como Tomado'}
+                      {med.taken ? 'Tomado' : 'Marcar como Tomado'}
                     </button>
 
                     {!isIdoso && (

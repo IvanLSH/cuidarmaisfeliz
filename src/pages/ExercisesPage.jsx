@@ -108,7 +108,7 @@ export default function ExercisesPage() {
                   </svg>
                 </div>
                 <div className="absolute bottom-3 left-3 px-3 py-1 bg-slate-950 text-xs font-black rounded border border-slate-700 text-white">
-                  ⏱️ {exercise.duration}
+                  Duração: {exercise.duration}
                 </div>
                 <div className="absolute bottom-3 right-3 px-3 py-1 bg-white text-slate-950 text-xs font-black rounded border border-slate-900">
                   {exercise.difficulty}
