@@ -10,7 +10,6 @@ export default function PanicModal({ userRole }) {
   const pollingRef = useRef(null);
 
   useEffect(() => {
-    // Only caregivers receive panic alerts
     if (isIdoso || !caregiver?.code) {
       if (activeAlert) {
         alarmSound.stop();
@@ -61,14 +60,12 @@ export default function PanicModal({ userRole }) {
     <div className="fixed inset-0 z-50 bg-red-950/85 backdrop-blur-md flex items-center justify-center p-4 animate-pulse">
       <div className="bg-white rounded-3xl border-8 border-red-600 shadow-2xl max-w-lg w-full overflow-hidden text-center p-6 sm:p-8 space-y-6">
         
-        {/* Flashing Siren Icon */}
         <div className="w-24 h-24 rounded-full bg-red-600 text-white flex items-center justify-center mx-auto shadow-xl animate-bounce">
           <svg className="w-14 h-14 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
           </svg>
         </div>
 
-        {/* Title & Warning */}
         <div>
           <span className="px-4 py-1.5 bg-red-100 text-red-900 border-2 border-red-400 font-black text-xs uppercase tracking-widest rounded-full">
             🚨 ALERTA DE EMERGÊNCIA
@@ -81,7 +78,6 @@ export default function PanicModal({ userRole }) {
           </p>
         </div>
 
-        {/* Info Box */}
         <div className="bg-red-50 p-4 rounded-2xl border-2 border-red-200 text-left space-y-1">
           <p className="text-sm font-bold text-slate-800">
             <strong>Idoso:</strong> {activeAlert.idoso_name}
@@ -94,7 +90,6 @@ export default function PanicModal({ userRole }) {
           </p>
         </div>
 
-        {/* Action Button */}
         <button
           onClick={handleDismiss}
           className="w-full py-5 bg-red-700 hover:bg-red-800 text-white font-black text-2xl rounded-2xl shadow-xl border-4 border-red-950 transition cursor-pointer flex items-center justify-center gap-3"

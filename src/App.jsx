@@ -15,7 +15,6 @@ import PanicButton from './components/PanicButton';
 
 import { clearToken } from './api';
 
-// app states: null → role selection | 'cuidador_login' → login screen | 'idoso_link' → idoso code screen | 'idoso' / 'cuidador' → app
 export default function App() {
   const [appState, setAppState] = useState(() => {
     return localStorage.getItem('cuidado_feliz_role') || null;
@@ -23,28 +22,24 @@ export default function App() {
 
   const [activePage, setActivePage] = useState('home');
 
-  // Called from RoleSelectionPage
   const handleSelectRole = (role) => {
     if (role === 'cuidador') {
-      setAppState('cuidador_login'); // go to login screen first
+      setAppState('cuidador_login');
     } else {
-      setAppState('idoso_link'); // go to caregiver code entry screen first
+      setAppState('idoso_link');
     }
   };
 
-  // Called from LoginPage on success
   const handleLoginSuccess = () => {
     setAppState('cuidador');
     localStorage.setItem('cuidado_feliz_role', 'cuidador');
   };
 
-  // Called from IdosoLinkPage on success
   const handleIdosoLinkSuccess = () => {
     setAppState('idoso');
     localStorage.setItem('cuidado_feliz_role', 'idoso');
   };
 
-  // Called from anywhere to reset to role selection
   const handleChangeRole = () => {
     setAppState(null);
     localStorage.removeItem('cuidado_feliz_role');
@@ -52,17 +47,14 @@ export default function App() {
     setActivePage('home');
   };
 
-  // Scroll to top whenever activePage changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [activePage]);
 
-  // ── Role Selection ──
   if (!appState) {
     return <RoleSelectionPage onSelectRole={handleSelectRole} />;
   }
 
-  // ── Cuidador Login ──
   if (appState === 'cuidador_login') {
     return (
       <LoginPage
@@ -72,7 +64,6 @@ export default function App() {
     );
   }
 
-  // ── Idoso Caregiver Code Linkage ──
   if (appState === 'idoso_link') {
     return (
       <IdosoLinkPage
@@ -82,8 +73,7 @@ export default function App() {
     );
   }
 
-  // ── App (idoso or cuidador) ──
-  const userRole = appState; // 'idoso' or 'cuidador'
+  const userRole = appState;
   const isIdoso = userRole === 'idoso';
 
   const renderPage = () => {
@@ -114,7 +104,6 @@ export default function App() {
 
       <Footer onNavigate={setActivePage} userRole={userRole} />
 
-      {/* Panic Emergency Alert Modal (for Caregivers) & SOS Button (for Idosos) */}
       <PanicModal userRole={userRole} />
       <PanicButton userRole={userRole} />
     </div>

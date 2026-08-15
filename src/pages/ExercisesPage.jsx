@@ -53,7 +53,6 @@ export default function ExercisesPage({ onNavigate }) {
       try {
         const data = await getExercises(selectedCategory);
         if (data && data.length > 0) {
-          // Merge API data with video URLs
           const merged = data.map((item) => {
             const match = DEFAULT_EXERCISES.find(d => d.title === item.title);
             return match ? { ...item, ...match } : item;
@@ -77,7 +76,6 @@ export default function ExercisesPage({ onNavigate }) {
     <div className="py-10 bg-slate-100 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-10">
           <span className="px-4 py-1.5 bg-red-800 text-white text-xs sm:text-sm font-black rounded-full uppercase tracking-wider border-2 border-red-950">
             Saúde & Movimento
@@ -90,7 +88,6 @@ export default function ExercisesPage({ onNavigate }) {
           </p>
         </div>
 
-        {/* Category Filters */}
         <div className="flex flex-wrap justify-center gap-3 mb-10">
           {categories.map((cat) => (
             <button
@@ -107,14 +104,12 @@ export default function ExercisesPage({ onNavigate }) {
           ))}
         </div>
 
-        {/* Exercises Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {filteredExercises.map((exercise) => (
             <div
               key={exercise.id}
               className="bg-white rounded-2xl border-2 border-slate-300 shadow-md overflow-hidden hover:border-red-600 transition flex flex-col"
             >
-              {/* Embedded YouTube Video Player */}
               <div className="relative w-full aspect-video bg-slate-950 border-b-2 border-slate-900">
                 {exercise.embedUrl ? (
                   <iframe
@@ -130,7 +125,6 @@ export default function ExercisesPage({ onNavigate }) {
                   </div>
                 )}
                 
-                {/* Badges overlay */}
                 <div className="absolute top-3 left-3 px-3 py-1 bg-slate-950/80 text-white text-xs font-black rounded border border-slate-700 backdrop-blur-sm pointer-events-none">
                   Duração: {exercise.duration}
                 </div>
@@ -139,7 +133,6 @@ export default function ExercisesPage({ onNavigate }) {
                 </div>
               </div>
 
-              {/* Card Content */}
               <div className="p-6 flex-grow flex flex-col justify-between">
                 <div>
                   <h3 className="text-2xl font-black text-slate-950 mb-2">
@@ -174,7 +167,6 @@ export default function ExercisesPage({ onNavigate }) {
           ))}
         </div>
 
-        {/* Return to Home Button */}
         <div className="mt-12 text-center">
           <button
             onClick={() => onNavigate && onNavigate('home')}

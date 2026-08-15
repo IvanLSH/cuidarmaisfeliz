@@ -3,14 +3,6 @@ import React from 'react';
 export default function Features({ onNavigate }) {
   const items = [
     {
-      id: 'chat',
-      title: 'Chat',
-      image: null,
-      bg: 'bg-teal-700',
-      hoverBg: 'hover:bg-teal-800',
-      textColor: 'text-white',
-    },
-    {
       id: 'exercises',
       title: 'Movimente!',
       image: '/images/exercises.jpg',
@@ -34,10 +26,18 @@ export default function Features({ onNavigate }) {
       hoverBg: 'hover:bg-purple-800',
       textColor: 'text-white',
     },
+    {
+      id: 'chat',
+      title: 'Chat',
+      image: '/images/chat.jpg',
+      bg: 'bg-teal-700',
+      hoverBg: 'hover:bg-teal-800',
+      textColor: 'text-white',
+    },
   ];
 
   return (
-    <section id="recursos" className="w-full my-auto bg-white py-6">
+    <section id="recursos" className="py-12 sm:py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {items.map((item) => (

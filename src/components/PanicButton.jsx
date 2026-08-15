@@ -35,7 +35,6 @@ export default function PanicButton({ userRole }) {
 
   return (
     <>
-      {/* Floating Panic SOS Button for Idosos */}
       <div className="fixed bottom-6 right-6 z-40">
         <button
           onClick={handlePanicClick}
@@ -49,7 +48,6 @@ export default function PanicButton({ userRole }) {
         </button>
       </div>
 
-      {/* Confirmation Modal for Idoso */}
       {sentAlert && (
         <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl border-4 border-red-600 shadow-2xl max-w-md w-full p-6 text-center space-y-4">

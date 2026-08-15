@@ -20,7 +20,6 @@ export default function MedicationsPage({ userRole, onNavigate }) {
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
 
-  // Form fields
   const [newName, setNewName] = useState('');
   const [newDosage, setNewDosage] = useState('');
   const [newTime, setNewTime] = useState('');
@@ -36,7 +35,6 @@ export default function MedicationsPage({ userRole, onNavigate }) {
   const activeCaregiverCode = isIdoso ? linkedCaregiver?.code : caregiverInfo?.code;
   const activeIdosoCode = isIdoso ? loggedInIdoso?.code : null;
 
-  // Fetch medications & idosos list on mount
   useEffect(() => {
     async function loadData() {
       try {
@@ -77,7 +75,6 @@ export default function MedicationsPage({ userRole, onNavigate }) {
         console.error('Erro ao alternar medicamento na API:', err);
       }
     }
-    // Fallback local
     setMedications(medications.map(m => 
       m.id === id ? { ...m, taken: !m.taken } : m
     ));
@@ -93,7 +90,6 @@ export default function MedicationsPage({ userRole, onNavigate }) {
         console.error('Erro ao deletar medicamento na API:', err);
       }
     }
-    // Fallback local
     setMedications(medications.filter(m => m.id !== id));
   };
 
@@ -124,7 +120,6 @@ export default function MedicationsPage({ userRole, onNavigate }) {
       }
     }
 
-    // Fallback local
     const newMed = {
       id: Date.now(),
       ...payload,
@@ -148,7 +143,6 @@ export default function MedicationsPage({ userRole, onNavigate }) {
     <div className="py-10 bg-slate-100 min-h-screen">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Idoso Linkage Notice Banner */}
         {isIdoso && linkedCaregiver && (
           <div className="bg-emerald-800 text-white rounded-2xl p-5 mb-6 shadow-md border-2 border-emerald-950 flex items-center justify-between font-black text-lg">
             <div className="flex items-center gap-3">
@@ -172,7 +166,6 @@ export default function MedicationsPage({ userRole, onNavigate }) {
           </div>
         )}
 
-        {/* Header */}
         <div className="text-center mb-10">
           <span className="px-4 py-1.5 bg-blue-800 text-white text-xs sm:text-sm font-black rounded-full uppercase tracking-wider border-2 border-blue-950">
             Controle Diário
@@ -185,7 +178,6 @@ export default function MedicationsPage({ userRole, onNavigate }) {
           </p>
         </div>
 
-        {/* Progress Alert Banner - Only for Idosos */}
         {isIdoso ? (
           <div className="bg-blue-800 text-white rounded-2xl p-6 mb-8 shadow-md border-2 border-blue-950 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
@@ -212,7 +204,6 @@ export default function MedicationsPage({ userRole, onNavigate }) {
           </div>
         )}
 
-        {/* Add Medication Form (Caregiver only) */}
         {!isIdoso && showAddForm && (
           <form onSubmit={handleAddMedication} className="bg-white p-6 rounded-2xl border-2 border-blue-600 shadow-xl mb-8 space-y-4">
             <h3 className="text-xl font-black text-slate-950">Cadastrar Novo Medicamento</h3>
@@ -294,13 +285,11 @@ export default function MedicationsPage({ userRole, onNavigate }) {
           </form>
         )}
 
-        {/* Loading Indicator */}
         {loading ? (
           <div className="bg-white p-8 rounded-2xl text-center border-2 border-slate-300 text-slate-800 font-bold text-lg">
             Carregando medicamentos...
           </div>
         ) : (
-          /* Medications List */
           <div className="space-y-4">
             {medications.length === 0 ? (
               <div className="bg-white p-8 rounded-2xl text-center border-2 border-slate-300 text-slate-800 font-bold text-lg">
@@ -317,7 +306,6 @@ export default function MedicationsPage({ userRole, onNavigate }) {
                   }`}
                 >
                   <div className="flex items-start space-x-4">
-                    {/* Status Indicator - Solid Block */}
                     <div
                       className={`px-4 py-2.5 rounded-xl flex flex-col items-center justify-center shrink-0 border-2 ${
                         med.taken
@@ -349,7 +337,6 @@ export default function MedicationsPage({ userRole, onNavigate }) {
                     </div>
                   </div>
 
-                  {/* Buttons */}
                   <div className="flex items-center gap-3 w-full sm:w-auto justify-end pt-2 sm:pt-0 border-t-2 sm:border-0 border-slate-200">
                     <button
                       onClick={() => handleToggleTaken(med.id)}
@@ -380,7 +367,6 @@ export default function MedicationsPage({ userRole, onNavigate }) {
           </div>
         )}
 
-        {/* Return to Home Button */}
         <div className="mt-12 text-center">
           <button
             onClick={() => onNavigate && onNavigate('home')}

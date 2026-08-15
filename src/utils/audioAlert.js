@@ -1,4 +1,3 @@
-// Web Audio API Synthesizer for Emergency Alarm Siren
 class EmergencyAudioAlert {
   constructor() {
     this.audioCtx = null;
@@ -18,7 +17,7 @@ class EmergencyAudioAlert {
       this.gainNode = this.audioCtx.createGain();
 
       this.oscillator.type = 'sawtooth';
-      this.oscillator.frequency.setValueAtTime(880, this.audioCtx.currentTime); // High A note
+      this.oscillator.frequency.setValueAtTime(880, this.audioCtx.currentTime);
 
       this.gainNode.gain.setValueAtTime(0.3, this.audioCtx.currentTime);
 
@@ -28,7 +27,6 @@ class EmergencyAudioAlert {
       this.oscillator.start();
       this.isPlaying = true;
 
-      // Oscillate siren frequency between 880Hz and 660Hz
       let highTone = true;
       this.intervalId = setInterval(() => {
         if (!this.audioCtx || !this.oscillator) return;

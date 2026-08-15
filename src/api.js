@@ -1,6 +1,5 @@
 import { supabase, isSupabaseConfigured } from './supabaseClient';
 
-// Helper for SHA-256 password hashing via Web Crypto API
 async function hashPassword(password) {
   const encoder = new TextEncoder();
   const data = encoder.encode(password);
@@ -9,7 +8,6 @@ async function hashPassword(password) {
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-// Generate complex caregiver code like CF#8K9P
 export function generateCaregiverCode() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   const symbols = ['#', '@', '$', '!'];
@@ -21,7 +19,6 @@ export function generateCaregiverCode() {
   return code;
 }
 
-// Generate unique idoso code like ID#9K2P
 export function generateIdosoCode() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   const symbols = ['#', '@', '$', '!'];
@@ -33,7 +30,6 @@ export function generateIdosoCode() {
   return code;
 }
 
-// ─── Token / Session helpers ──────────────────────────────────────────────────
 export function getToken() {
   return localStorage.getItem('cuidado_feliz_role') ? 'session-active' : null;
 }
@@ -63,7 +59,6 @@ export function getLoggedInIdoso() {
   return saved ? JSON.parse(saved) : null;
 }
 
-// ─── Auth Caregiver ────────────────────────────────────────────────────────────
 export async function login(email, password) {
   const cleanEmail = email.trim().toLowerCase();
   const passwordHash = await hashPassword(password);
@@ -90,7 +85,6 @@ export async function login(email, password) {
     }
   }
 
-  // Local user check
   const savedUser = localStorage.getItem('cuidado_feliz_user');
   if (savedUser) {
     const user = JSON.parse(savedUser);
@@ -140,14 +134,12 @@ export async function register(name, email, password) {
   return localUser;
 }
 
-// ─── Register Elderly Person (Cadastrar Idoso pelo Cuidador) ────────────────
 export async function registerIdoso(name, caregiverCode, caregiverName) {
   const cleanName = name.trim();
   const idosoCode = generateIdosoCode();
   const cCode = caregiverCode || 'CF#7X9K';
   const cName = caregiverName || 'Cuidador';
 
-  // Check 3 idosos limit
   const existingList = await getIdososByCaregiver(cCode);
   if (existingList && existingList.length >= 3) {
     throw new Error('Limite máximo de 3 idosos cadastrados por cuidador atingido.');
@@ -175,7 +167,6 @@ export async function registerIdoso(name, caregiverCode, caregiverName) {
     }
   }
 
-  // Fallback local storage list
   const localList = JSON.parse(localStorage.getItem('cuidado_feliz_idosos_list') || '[]');
   const localIdoso = { id: Date.now(), ...newIdoso };
   localList.push(localIdoso);
@@ -200,12 +191,10 @@ export async function getIdososByCaregiver(caregiverCode) {
     }
   }
 
-  // Local storage check
   const localList = JSON.parse(localStorage.getItem('cuidado_feliz_idosos_list') || '[]');
   return localList.filter(i => i.caregiver_code === caregiverCode);
 }
 
-// ─── Validar / Entrar como Idoso pelo Código ─────────────────────────────────
 export async function validateIdosoCode(inputCode) {
   const cleanCode = (inputCode || '').trim().toUpperCase();
 
@@ -231,7 +220,6 @@ export async function validateIdosoCode(inputCode) {
     }
   }
 
-  // Local storage check
   const localList = JSON.parse(localStorage.getItem('cuidado_feliz_idosos_list') || '[]');
   const match = localList.find(i => i.code === cleanCode);
   if (match) {
@@ -243,19 +231,16 @@ export async function validateIdosoCode(inputCode) {
   throw new Error('Código de idoso não encontrado. Verifique se o cuidador já criou seu cadastro.');
 }
 
-// Get currently linked caregiver info
 export function getLinkedCaregiver() {
   const saved = localStorage.getItem('cuidado_feliz_linked_caregiver');
   return saved ? JSON.parse(saved) : null;
 }
 
-// Get logged in caregiver info
 export function getLoggedInCaregiver() {
   const saved = localStorage.getItem('cuidado_feliz_user');
   return saved ? JSON.parse(saved) : null;
 }
 
-// ─── Medications ──────────────────────────────────────────────────────────────
 export async function getMedications(caregiverCode, idosoCode) {
   if (isSupabaseConfigured) {
     try {
@@ -271,7 +256,7 @@ export async function getMedications(caregiverCode, idosoCode) {
       console.warn('Erro ao consultar medicamentos no Supabase:', err.message);
     }
   }
-  return null; // Signals component to use local fallback
+  return null;
 }
 
 export async function createMedication(payload) {
@@ -328,7 +313,6 @@ export async function deleteMedication(id) {
   return true;
 }
 
-// ─── Events ───────────────────────────────────────────────────────────────────
 export async function getEvents() {
   if (isSupabaseConfigured) {
     try {
@@ -345,7 +329,6 @@ export async function getEvents() {
   return null;
 }
 
-// ─── Exercises ────────────────────────────────────────────────────────────────
 export async function getExercises(category) {
   if (isSupabaseConfigured) {
     try {
@@ -362,7 +345,6 @@ export async function getExercises(category) {
   return null;
 }
 
-// ─── Chat ──────────────────────────────────────────────────────────────────────
 function chatLocalKey(caregiverCode, idosoCode) {
   return `cuidado_feliz_chat_${caregiverCode}_${idosoCode}`;
 }
@@ -420,7 +402,6 @@ export async function sendChatMessage(caregiverCode, idosoCode, senderRole, send
     }
   }
 
-  // localStorage fallback
   const existing = getLocalMessages(caregiverCode, idosoCode);
   const localMsg = { id: Date.now(), ...newMsg, created_at: new Date().toISOString() };
   existing.push(localMsg);
@@ -428,7 +409,6 @@ export async function sendChatMessage(caregiverCode, idosoCode, senderRole, send
   return localMsg;
 }
 
-// ─── Panic / Emergency Alerts ──────────────────────────────────────────────────
 export async function triggerPanicAlert(caregiverCode, idosoCode, idosoName) {
   const alertData = {
     caregiver_code: caregiverCode,
@@ -451,7 +431,6 @@ export async function triggerPanicAlert(caregiverCode, idosoCode, idosoName) {
     }
   }
 
-  // Local storage fallback
   const key = `cuidado_feliz_panic_${caregiverCode}`;
   const localAlert = { id: Date.now(), ...alertData };
   localStorage.setItem(key, JSON.stringify(localAlert));
@@ -502,4 +481,3 @@ export async function dismissPanicAlert(alertId, caregiverCode) {
   localStorage.removeItem(key);
   return true;
 }
-

@@ -9,7 +9,6 @@ import {
   getIdososByCaregiver,
 } from '../api';
 
-// ─── Helpers ────────────────────────────────────────────────────────────────
 function formatTime(isoString) {
   if (!isoString) return '';
   const d = new Date(isoString);
@@ -28,7 +27,6 @@ function formatDate(isoString) {
   return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
 }
 
-// Group messages by date label
 function groupMessagesByDate(messages) {
   const groups = [];
   let lastLabel = null;
@@ -43,7 +41,6 @@ function groupMessagesByDate(messages) {
   return groups;
 }
 
-// ─── Avatar Initials ────────────────────────────────────────────────────────
 function Avatar({ name, role }) {
   const initials = (name || '?')
     .split(' ')
@@ -59,7 +56,6 @@ function Avatar({ name, role }) {
   );
 }
 
-// ─── Idoso Sidebar Item ──────────────────────────────────────────────────────
 function IdosoListItem({ idoso, isActive, onClick, unread }) {
   const initials = (idoso.name || '?')
     .split(' ')
@@ -97,7 +93,6 @@ function IdosoListItem({ idoso, isActive, onClick, unread }) {
   );
 }
 
-// ─── Main ChatPage Component ─────────────────────────────────────────────────
 export default function ChatPage({ onNavigate, userRole }) {
   const isIdoso = userRole === 'idoso';
 
@@ -106,11 +101,9 @@ export default function ChatPage({ onNavigate, userRole }) {
   const linkedCaregiver = getLinkedCaregiver();
   const idosoName = getIdosoName();
 
-  // For caregiver: list of their idosos
   const [idososList, setIdososList] = useState([]);
   const [selectedIdoso, setSelectedIdoso] = useState(null);
 
-  // Chat state
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
   const [sending, setSending] = useState(false);
@@ -120,7 +113,6 @@ export default function ChatPage({ onNavigate, userRole }) {
   const inputRef = useRef(null);
   const pollingRef = useRef(null);
 
-  // ── Load idosos list (caregiver only) ──────────────────────────────────────
   useEffect(() => {
     if (!isIdoso && caregiver) {
       getIdososByCaregiver(caregiver.code).then((list) => {
@@ -130,7 +122,6 @@ export default function ChatPage({ onNavigate, userRole }) {
     }
   }, [isIdoso, caregiver]);
 
-  // ── Active conversation identifiers ────────────────────────────────────────
   const activeCaregiverCode = isIdoso
     ? linkedCaregiver?.code
     : caregiver?.code;
@@ -139,7 +130,6 @@ export default function ChatPage({ onNavigate, userRole }) {
     ? idoso?.code
     : selectedIdoso?.code;
 
-  // ── Load messages & polling ────────────────────────────────────────────────
   const loadMessages = useCallback(async () => {
     if (!activeCaregiverCode || !activeIdosoCode) return;
     try {
@@ -157,7 +147,6 @@ export default function ChatPage({ onNavigate, userRole }) {
     setMessages([]);
     loadMessages();
 
-    // Poll every 3 seconds
     if (pollingRef.current) clearInterval(pollingRef.current);
     pollingRef.current = setInterval(loadMessages, 3000);
 
@@ -166,12 +155,10 @@ export default function ChatPage({ onNavigate, userRole }) {
     };
   }, [loadMessages]);
 
-  // ── Scroll to bottom on new messages ──────────────────────────────────────
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // ── Send message ───────────────────────────────────────────────────────────
   const handleSend = async (e) => {
     e.preventDefault();
     if (!inputText.trim() || sending || !activeCaregiverCode || !activeIdosoCode) return;
@@ -182,7 +169,6 @@ export default function ChatPage({ onNavigate, userRole }) {
     const content = inputText.trim();
     setInputText('');
 
-    // Optimistic UI
     const optimistic = {
       id: `opt-${Date.now()}`,
       caregiver_code: activeCaregiverCode,
@@ -196,7 +182,6 @@ export default function ChatPage({ onNavigate, userRole }) {
 
     try {
       await sendChatMessage(activeCaregiverCode, activeIdosoCode, senderRole, senderName, content);
-      // Reload to sync IDs
       await loadMessages();
     } catch (err) {
       console.warn('Erro ao enviar mensagem:', err.message);
@@ -208,16 +193,13 @@ export default function ChatPage({ onNavigate, userRole }) {
 
   const grouped = groupMessagesByDate(messages);
 
-  // ── Render ─────────────────────────────────────────────────────────────────
   return (
     <div className="bg-slate-100 min-h-screen flex flex-col">
       <div className="max-w-5xl w-full mx-auto flex flex-col flex-1 h-[calc(100vh-130px)]">
 
-        {/* ── Caregiver: dual panel (sidebar + chat) ── */}
         {!isIdoso ? (
           <div className="flex flex-1 overflow-hidden rounded-2xl shadow-xl border-2 border-slate-300 m-4 bg-white">
 
-            {/* Sidebar: idoso list */}
             <aside className="w-64 shrink-0 border-r-2 border-slate-200 flex flex-col bg-slate-50">
               <div className="px-4 py-4 border-b-2 border-slate-200 bg-white">
                 <h2 className="font-black text-slate-950 text-base">Conversas</h2>
@@ -241,11 +223,9 @@ export default function ChatPage({ onNavigate, userRole }) {
               </div>
             </aside>
 
-            {/* Chat area */}
             <div className="flex-1 flex flex-col overflow-hidden">
               {selectedIdoso ? (
                 <>
-                  {/* Chat header */}
                   <div className="px-5 py-3.5 border-b-2 border-slate-200 bg-white flex items-center gap-3 shrink-0">
                     <div className="w-9 h-9 rounded-full bg-emerald-700 text-white flex items-center justify-center font-black text-sm">
                       {(selectedIdoso.name || '?').split(' ').slice(0, 2).map((w) => w[0]).join('').toUpperCase()}
@@ -260,10 +240,8 @@ export default function ChatPage({ onNavigate, userRole }) {
                     </div>
                   </div>
 
-                  {/* Messages */}
                   <MessageList grouped={grouped} loading={loading} myRole="cuidador" bottomRef={bottomRef} />
 
-                  {/* Input */}
                   <ChatInput
                     inputText={inputText}
                     setInputText={setInputText}
@@ -286,9 +264,7 @@ export default function ChatPage({ onNavigate, userRole }) {
             </div>
           </div>
         ) : (
-          // ── Idoso: single full-width chat ──
           <div className="flex flex-col flex-1 overflow-hidden rounded-2xl shadow-xl border-2 border-slate-300 m-4 bg-white">
-            {/* Chat header for idoso */}
             <div className="px-5 py-4 border-b-2 border-slate-200 bg-blue-800 text-white flex items-center gap-3 shrink-0 rounded-t-2xl">
               <div className="w-10 h-10 rounded-full bg-white text-blue-800 flex items-center justify-center font-black text-sm">
                 {(linkedCaregiver?.name || 'C').split(' ').slice(0, 2).map((w) => w[0]).join('').toUpperCase()}
@@ -303,10 +279,8 @@ export default function ChatPage({ onNavigate, userRole }) {
               </div>
             </div>
 
-            {/* Messages */}
             <MessageList grouped={grouped} loading={loading} myRole="idoso" bottomRef={bottomRef} isIdoso />
 
-            {/* Input */}
             <ChatInput
               inputText={inputText}
               setInputText={setInputText}
@@ -318,7 +292,6 @@ export default function ChatPage({ onNavigate, userRole }) {
           </div>
         )}
 
-        {/* Return home button */}
         <div className="text-center pb-6">
           <button
             onClick={() => onNavigate && onNavigate('home')}
@@ -333,7 +306,6 @@ export default function ChatPage({ onNavigate, userRole }) {
   );
 }
 
-// ─── MessageList ─────────────────────────────────────────────────────────────
 function MessageList({ grouped, loading, myRole, bottomRef, isIdoso }) {
   return (
     <div className="flex-1 overflow-y-auto px-4 py-4 space-y-1 bg-slate-50">
@@ -403,7 +375,6 @@ function MessageList({ grouped, loading, myRole, bottomRef, isIdoso }) {
   );
 }
 
-// ─── ChatInput ────────────────────────────────────────────────────────────────
 function ChatInput({ inputText, setInputText, handleSend, sending, inputRef, isIdoso }) {
   return (
     <form

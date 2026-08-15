@@ -60,7 +60,6 @@ export default function Navbar({ activePage, onNavigate, userRole, onChangeRole 
       <header className="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-sm py-3 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto flex flex-col items-center justify-center gap-3 text-center">
           
-          {/* TOP: Símbolo e Nome do App Centralizados Sem Sublinhado */}
           <button
             onClick={() => handleNav('home')}
             className="flex items-center space-x-3 cursor-pointer group border-none outline-none no-underline"
@@ -79,7 +78,6 @@ export default function Navbar({ activePage, onNavigate, userRole, onChangeRole 
             </span>
           </button>
 
-          {/* Botões de Ação */}
           <div className="flex flex-wrap items-center justify-center gap-2">
             {!isIdoso && (
               <button
@@ -111,8 +109,6 @@ export default function Navbar({ activePage, onNavigate, userRole, onChangeRole 
         </div>
       </header>
 
-
-      {/* Idoso Management Modal for Caregivers */}
       <IdosoManagementModal
         isOpen={isIdosoModalOpen}
         onClose={() => setIsIdosoModalOpen(false)}

@@ -60,7 +60,6 @@ export default function IdosoManagementModal({ isOpen, onClose, onIdosoAdded }) 
     <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="bg-white rounded-3xl border-4 border-blue-700 shadow-2xl max-w-lg w-full overflow-hidden flex flex-col max-h-[90vh]">
         
-        {/* Header */}
         <div className="bg-blue-800 text-white px-6 py-5 border-b-4 border-blue-950 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-white text-blue-900 flex items-center justify-center font-black shadow">
@@ -84,7 +83,6 @@ export default function IdosoManagementModal({ isOpen, onClose, onIdosoAdded }) 
 
         <div className="p-6 overflow-y-auto space-y-6">
 
-          {/* Newly Created Success Banner */}
           {createdIdoso && (
             <div className="bg-emerald-100 border-2 border-emerald-500 rounded-2xl p-5 text-emerald-950 space-y-2">
               <div className="flex items-center justify-between">
@@ -123,7 +121,6 @@ export default function IdosoManagementModal({ isOpen, onClose, onIdosoAdded }) 
             </div>
           )}
 
-          {/* Form */}
           <form onSubmit={handleRegister} className="space-y-4">
             <div className="flex items-center justify-between">
               <label className="block text-sm font-extrabold text-slate-900">
@@ -169,7 +166,6 @@ export default function IdosoManagementModal({ isOpen, onClose, onIdosoAdded }) 
             </button>
           </form>
 
-          {/* Registered Idosos List */}
           <div className="pt-4 border-t-2 border-slate-200">
             <h3 className="text-sm font-black text-slate-900 mb-3 uppercase tracking-wider">
               Idosos Vinculados ({idososList.length})
@@ -206,7 +202,6 @@ export default function IdosoManagementModal({ isOpen, onClose, onIdosoAdded }) 
 
         </div>
 
-        {/* Footer */}
         <div className="bg-slate-100 px-6 py-4 border-t-2 border-slate-200 text-right">
           <button
             onClick={onClose}

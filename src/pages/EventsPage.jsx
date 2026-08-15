@@ -72,7 +72,6 @@ export default function EventsPage({ onNavigate }) {
   return (
     <div className="py-10 bg-slate-100 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-12">
           <span className="px-4 py-1.5 bg-purple-800 text-white text-xs sm:text-sm font-black rounded-full uppercase tracking-wider border-2 border-purple-950">
             Comunidade & Lazer
@@ -85,7 +84,6 @@ export default function EventsPage({ onNavigate }) {
           </p>
         </div>
 
-        {/* Events Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {events.map((event) => {
             const isConfirmed = !!confirmedEvents[event.id];
@@ -126,7 +124,6 @@ export default function EventsPage({ onNavigate }) {
                   </div>
                 </div>
 
-                {/* Footer Action */}
                 <div className="px-6 py-4 bg-slate-100 border-t-2 border-slate-200 flex items-center justify-between">
                   <span className="text-sm font-bold text-slate-900">
                     {isConfirmed ? 'Presença Confirmada' : 'Ainda não confirmado'}
@@ -147,7 +144,6 @@ export default function EventsPage({ onNavigate }) {
           })}
         </div>
 
-        {/* Return to Home Button */}
         <div className="mt-12 text-center">
           <button
             onClick={() => onNavigate && onNavigate('home')}
