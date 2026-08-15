@@ -5,7 +5,6 @@ export default function RoleSelectionPage({ onSelectRole, darkMode, onToggleDark
     <div className="min-h-screen bg-slate-100 dark:bg-slate-950 flex items-center justify-center p-4 sm:p-6 lg:p-8 transition-colors">
       <div className="max-w-3xl w-full bg-white dark:bg-slate-900 rounded-3xl border-2 border-slate-300 dark:border-slate-800 shadow-2xl p-6 sm:p-10 text-center relative">
         
-        {/* Dark mode toggle top right */}
         {onToggleDarkMode && (
           <button
             onClick={onToggleDarkMode}
@@ -23,7 +22,6 @@ export default function RoleSelectionPage({ onSelectRole, darkMode, onToggleDark
           </button>
         )}
 
-        {/* Logo & Welcome */}
         <div className="w-18 h-18 rounded-2xl bg-emerald-700 text-white flex items-center justify-center font-bold mx-auto mb-4 shadow-lg">
           <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.646a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -35,12 +33,10 @@ export default function RoleSelectionPage({ onSelectRole, darkMode, onToggleDark
         </h1>
         
         <p className="mt-3 text-lg font-bold text-slate-800 dark:text-slate-300 max-w-lg mx-auto">
-          Para personalizar sua experiência, por favor selecione quem utilizará este dispositivo:
+          Por favor selecione quem utilizará este dispositivo:
         </p>
 
-        {/* Selection Cards Grid */}
         <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-          {/* Option: Idoso */}
           <button
             onClick={() => onSelectRole('idoso')}
             className="group p-6 sm:p-8 rounded-2xl border-4 border-emerald-600 dark:border-emerald-500 bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-950 transition-all cursor-pointer flex flex-col justify-between shadow-md hover:shadow-xl text-left"
@@ -65,7 +61,6 @@ export default function RoleSelectionPage({ onSelectRole, darkMode, onToggleDark
             </div>
           </button>
 
-          {/* Option: Cuidador */}
           <button
             onClick={() => onSelectRole('cuidador')}
             className="group p-6 sm:p-8 rounded-2xl border-4 border-blue-600 dark:border-blue-500 bg-blue-50 dark:bg-blue-950/60 hover:bg-blue-100 dark:hover:bg-blue-950 transition-all cursor-pointer flex flex-col justify-between shadow-md hover:shadow-xl text-left"

@@ -74,13 +74,13 @@ export default function EventsPage({ onNavigate }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-12">
           <span className="px-4 py-1.5 bg-purple-800 text-white text-xs sm:text-sm font-black rounded-full uppercase tracking-wider border-2 border-purple-950">
-            Comunidade & Lazer
+            Comunidade e Lazer
           </span>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-950 dark:text-white mt-3">
             Divulgação de Eventos
           </h1>
           <p className="mt-3 text-lg text-slate-800 dark:text-slate-300 font-bold">
-            Participe de oficinas, palestras de saúde e encontros comunitários preparados especialmente para você.
+            Participe de oficinas, palestras de saúde e encontros comunitários.
           </p>
         </div>
 

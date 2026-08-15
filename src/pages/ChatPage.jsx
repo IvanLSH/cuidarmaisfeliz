@@ -136,7 +136,7 @@ export default function ChatPage({ onNavigate, userRole }) {
       const data = await getChatMessages(activeCaregiverCode, activeIdosoCode);
       setMessages(data || []);
     } catch (err) {
-      console.warn('Erro ao carregar mensagens:', err.message);
+      console.warn('Erro ao carregar mensagens');
     } finally {
       setLoading(false);
     }
@@ -184,7 +184,7 @@ export default function ChatPage({ onNavigate, userRole }) {
       await sendChatMessage(activeCaregiverCode, activeIdosoCode, senderRole, senderName, content);
       await loadMessages();
     } catch (err) {
-      console.warn('Erro ao enviar mensagem:', err.message);
+      console.warn('Erro ao enviar mensagem');
     } finally {
       setSending(false);
       inputRef.current?.focus();
@@ -385,7 +385,8 @@ function ChatInput({ inputText, setInputText, handleSend, sending, inputRef, isI
         ref={inputRef}
         type="text"
         value={inputText}
-        onChange={(e) => setInputText(e.target.value)}
+        onChange={
+        (e) => setInputText(e.target.value)}
         placeholder={isIdoso ? 'Escreva uma mensagem...' : 'Digite sua mensagem...'}
         autoComplete="off"
         className={`flex-1 px-4 py-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-300 dark:border-slate-700 rounded-2xl font-medium text-slate-950 dark:text-white focus:border-blue-600 outline-none transition ${

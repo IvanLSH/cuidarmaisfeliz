@@ -60,7 +60,7 @@ export default function ExercisesPage({ onNavigate }) {
           setExercises(merged);
         }
       } catch (err) {
-        console.warn('API não conectada para exercícios, usando lista local:', err.message);
+        console.warn('usando lista local');
       }
     }
     loadExercises();
@@ -84,7 +84,7 @@ export default function ExercisesPage({ onNavigate }) {
             Guia de Exercícios em Vídeo
           </h1>
           <p className="mt-3 text-lg text-slate-800 dark:text-slate-300 font-bold">
-            Vídeos guiados com exercícios seguros para manter a mobilidade, equilíbrio e bem-estar.
+            Vídeos com exercícios para manter a mobilidade, equilíbrio e bem-estar.
           </p>
         </div>
 

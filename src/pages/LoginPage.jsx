@@ -51,8 +51,8 @@ export default function LoginPage({ onLoginSuccess, onBack, darkMode, onToggleDa
       await register(name.trim(), email.trim(), password);
       setSuccessMsg(
         isSupabaseConfigured
-          ? 'Conta de cuidador criada e gravada com sucesso no Supabase!'
-          : 'Conta de cuidador criada com sucesso (Modo Demonstração local).'
+          ? 'Conta de cuidador criada!'
+          : 'Conta de cuidador criada com sucesso.'
       );
       
       setTimeout(async () => {
@@ -81,7 +81,6 @@ export default function LoginPage({ onLoginSuccess, onBack, darkMode, onToggleDa
     <div className="min-h-screen bg-slate-100 dark:bg-slate-950 flex items-center justify-center p-4 sm:p-6 lg:p-8 transition-colors">
       <div className="w-full max-w-md relative">
 
-        {/* Dark Mode toggle top right */}
         {onToggleDarkMode && (
           <div className="flex justify-end mb-3">
             <button
@@ -116,12 +115,6 @@ export default function LoginPage({ onLoginSuccess, onBack, darkMode, onToggleDa
               {isRegistering ? 'Cadastre-se para gerenciar a rotina do idoso' : 'Entre com suas credenciais para acessar'}
             </p>
           </div>
-
-          {!isSupabaseConfigured && (
-            <div className="bg-amber-100 dark:bg-amber-950/80 border-b-2 border-amber-300 dark:border-amber-700 px-4 py-2 text-center text-xs font-bold text-amber-950 dark:text-amber-200 flex items-center justify-center gap-1.5">
-              <span>Modo Demonstração Local (Sem arquivo .env do Supabase)</span>
-            </div>
-          )}
 
           <div className="flex border-b-2 border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
             <button

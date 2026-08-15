@@ -31,7 +31,6 @@ export default function IdosoLinkPage({ onLinkSuccess, onBack, darkMode, onToggl
     <div className="min-h-screen bg-slate-100 dark:bg-slate-950 flex items-center justify-center p-4 sm:p-6 lg:p-8 transition-colors">
       <div className="max-w-2xl w-full bg-white dark:bg-slate-900 rounded-3xl border-4 border-emerald-600 dark:border-emerald-500 shadow-2xl p-6 sm:p-10 text-center relative">
         
-        {/* Dark Mode toggle top right */}
         {onToggleDarkMode && (
           <button
             onClick={onToggleDarkMode}
@@ -60,7 +59,7 @@ export default function IdosoLinkPage({ onLinkSuccess, onBack, darkMode, onToggl
         </h1>
 
         <p className="mt-4 text-xl sm:text-2xl text-slate-900 dark:text-slate-200 font-extrabold leading-relaxed">
-          Digite o seu <strong className="text-emerald-900 dark:text-emerald-300 underline">Código Pessoal de Idoso</strong> gerado pelo seu cuidador para entrar:
+          Digite o seu <strong className="text-emerald-900 dark:text-emerald-300 underline">Código Pessoal de Idoso</strong> :
         </p>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-6 text-left">
