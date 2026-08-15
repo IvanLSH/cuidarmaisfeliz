@@ -1,6 +1,6 @@
 import { supabase, isSupabaseConfigured } from './supabaseClient';
 
-// Helper for SHA-256 password hashing via Web Crypto API
+// Helper for SHA-256 password hashing via Web Crypto AP
 async function hashPassword(password) {
   const encoder = new TextEncoder();
   const data = encoder.encode(password);
