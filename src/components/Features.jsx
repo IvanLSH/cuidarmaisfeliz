@@ -29,7 +29,7 @@ export default function Features({ onNavigate }) {
     {
       id: 'chat',
       title: 'Chat',
-      image: '/images/chat.jpg',
+      image: null,
       bg: 'bg-teal-700',
       hoverBg: 'hover:bg-teal-800',
       textColor: 'text-white',
