@@ -106,7 +106,7 @@ export default function App() {
         onChangeRole={handleChangeRole}
       />
 
-      <main className="flex-grow">
+      <main className="flex-grow flex flex-col justify-center">
         {renderPage()}
       </main>
 

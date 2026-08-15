@@ -37,7 +37,7 @@ export default function Features({ onNavigate }) {
   ];
 
   return (
-    <section id="recursos" className="py-12 sm:py-16 bg-white">
+    <section id="recursos" className="w-full my-auto bg-white py-6">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {items.map((item) => (
