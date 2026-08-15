@@ -15,6 +15,10 @@ const PAGE_COLORS = {
     active: 'text-white bg-purple-700 font-black shadow',
     hover: 'hover:text-purple-700 hover:bg-purple-50',
   },
+  chat: {
+    active: 'text-white bg-teal-700 font-black shadow',
+    hover: 'hover:text-teal-700 hover:bg-teal-50',
+  },
 };
 
 const DEFAULT_ACTIVE = 'text-white bg-slate-900 font-black shadow';
@@ -33,6 +37,7 @@ export default function Navbar({ activePage, onNavigate, userRole, onChangeRole 
     { id: 'exercises', label: 'Exercícios' },
     { id: 'medications', label: 'Medicamentos' },
     { id: 'events', label: 'Eventos' },
+    { id: 'chat', label: 'Chat' },
   ];
 
   const handleNav = (id) => {

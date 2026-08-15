@@ -213,23 +213,32 @@ export default function MedicationsPage({ userRole, onNavigate }) {
           </p>
         </div>
 
-        {/* Progress Alert Banner - Solid Blue */}
-        <div className="bg-blue-800 text-white rounded-2xl p-6 mb-8 shadow-md border-2 border-blue-950 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div>
-            <h3 className="text-xl font-black">Progresso de Hoje</h3>
-            <p className="text-white text-base font-bold mt-1">
-              Você tomou <strong className="text-amber-300 text-lg font-black">{takenCount}</strong> de <strong className="text-white text-lg font-black">{medications.length}</strong> medicamentos agendados.
-            </p>
+        {/* Progress Alert Banner - Only for Idosos */}
+        {isIdoso ? (
+          <div className="bg-blue-800 text-white rounded-2xl p-6 mb-8 shadow-md border-2 border-blue-950 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+              <h3 className="text-xl font-black">Progresso de Hoje</h3>
+              <p className="text-white text-base font-bold mt-1">
+                Você tomou <strong className="text-amber-300 text-lg font-black">{takenCount}</strong> de <strong className="text-white text-lg font-black">{medications.length}</strong> medicamentos agendados.
+              </p>
+            </div>
           </div>
-          {!isIdoso && (
+        ) : (
+          <div className="bg-blue-800 text-white rounded-2xl p-6 mb-8 shadow-md border-2 border-blue-950 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+              <h3 className="text-xl font-black">Painel de Prescrições do Cuidador</h3>
+              <p className="text-blue-100 text-base font-bold mt-1">
+                Cadastre e acompanhe os medicamentos para os seus idosos vinculados.
+              </p>
+            </div>
             <button
               onClick={() => setShowAddForm(!showAddForm)}
               className="w-full sm:w-auto px-6 py-3 bg-white text-slate-950 hover:bg-slate-100 font-black rounded-xl shadow-md text-base transition cursor-pointer border-2 border-slate-950"
             >
               {showAddForm ? 'Cancelar' : '+ Adicionar Remédio'}
             </button>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Add Medication Form (Caregiver only) */}
         {!isIdoso && showAddForm && (

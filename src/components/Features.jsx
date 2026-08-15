@@ -30,18 +30,16 @@ export default function Features({ onNavigate }) {
 
   return (
     <section id="recursos" className="py-12 sm:py-16 bg-white">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {items.map((item, index) => (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {items.map((item) => (
             <button
               key={item.id}
               onClick={() => onNavigate && onNavigate(item.id)}
-              className={`${item.bg} ${item.hoverBg} ${
-                index === 2 ? 'sm:col-span-2 sm:max-w-sm sm:mx-auto' : ''
-              } rounded-2xl shadow-md hover:shadow-xl transition-all duration-200 group cursor-pointer flex flex-col overflow-hidden text-left w-full`}
+              className={`${item.bg} ${item.hoverBg} rounded-2xl shadow-md hover:shadow-xl transition-all duration-200 group cursor-pointer flex flex-col overflow-hidden text-left w-full border-2 border-slate-900`}
             >
               {/* Image */}
-              <div className="w-full h-40 overflow-hidden">
+              <div className="w-full h-48 overflow-hidden bg-slate-950">
                 <img
                   src={item.image}
                   alt={item.title}
@@ -49,8 +47,8 @@ export default function Features({ onNavigate }) {
                 />
               </div>
               {/* Label */}
-              <div className="px-5 py-3.5">
-                <h3 className={`text-center text-xl font-black ${item.textColor}`}>
+              <div className="px-6 py-4">
+                <h3 className={`text-center text-2xl font-black ${item.textColor}`}>
                   {item.title}
                 </h3>
               </div>

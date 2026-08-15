@@ -9,6 +9,7 @@ import HomePage from './pages/HomePage';
 import ExercisesPage from './pages/ExercisesPage';
 import MedicationsPage from './pages/MedicationsPage';
 import EventsPage from './pages/EventsPage';
+import ChatPage from './pages/ChatPage';
 
 import { clearToken } from './api';
 
@@ -89,6 +90,7 @@ export default function App() {
       case 'exercises':  return <ExercisesPage onNavigate={setActivePage} userRole={userRole} />;
       case 'medications':return <MedicationsPage onNavigate={setActivePage} userRole={userRole} />;
       case 'events':     return <EventsPage onNavigate={setActivePage} userRole={userRole} />;
+      case 'chat':       return <ChatPage onNavigate={setActivePage} userRole={userRole} />;
       default:           return <HomePage onNavigate={setActivePage} userRole={userRole} />;
     }
   };

@@ -144,6 +144,12 @@ export async function registerIdoso(name, caregiverCode, caregiverName) {
   const cCode = caregiverCode || 'CF#7X9K';
   const cName = caregiverName || 'Cuidador Demo';
 
+  // Check 3 idosos limit
+  const existingList = await getIdososByCaregiver(cCode);
+  if (existingList && existingList.length >= 3) {
+    throw new Error('Limite máximo de 3 idosos cadastrados por cuidador atingido.');
+  }
+
   const newIdoso = {
     name: cleanName,
     caregiver_code: cCode,
@@ -372,3 +378,80 @@ export async function getExercises(category) {
   }
   return null;
 }
+
+// ─── Chat ──────────────────────────────────────────────────────────────────────
+const DEMO_MESSAGES = [
+  { id: 1, caregiver_code: 'CF#7X9K', idoso_code: 'ID#9K2P', sender_role: 'cuidador', sender_name: 'Cuidador Demo', content: 'Bom dia, Dona Maria! Como a senhora está se sentindo hoje?', created_at: new Date(Date.now() - 60000 * 30).toISOString() },
+  { id: 2, caregiver_code: 'CF#7X9K', idoso_code: 'ID#9K2P', sender_role: 'idoso',    sender_name: 'Dona Maria da Silva', content: 'Bom dia! Estou bem, obrigada. Tomei o remédio das 8h.', created_at: new Date(Date.now() - 60000 * 20).toISOString() },
+  { id: 3, caregiver_code: 'CF#7X9K', idoso_code: 'ID#9K2P', sender_role: 'cuidador', sender_name: 'Cuidador Demo', content: 'Que ótimo! Não esqueça de tomar o da vitamina D no almoço.', created_at: new Date(Date.now() - 60000 * 10).toISOString() },
+];
+
+function chatLocalKey(caregiverCode, idosoCode) {
+  return `cuidado_feliz_chat_${caregiverCode}_${idosoCode}`;
+}
+
+function getLocalMessages(caregiverCode, idosoCode) {
+  const key = chatLocalKey(caregiverCode, idosoCode);
+  const stored = localStorage.getItem(key);
+  if (stored) return JSON.parse(stored);
+  // Seed demo messages once
+  if (caregiverCode === 'CF#7X9K' && idosoCode === 'ID#9K2P') {
+    localStorage.setItem(key, JSON.stringify(DEMO_MESSAGES));
+    return DEMO_MESSAGES;
+  }
+  return [];
+}
+
+function saveLocalMessages(caregiverCode, idosoCode, messages) {
+  localStorage.setItem(chatLocalKey(caregiverCode, idosoCode), JSON.stringify(messages));
+}
+
+export async function getChatMessages(caregiverCode, idosoCode) {
+  if (isSupabaseConfigured) {
+    try {
+      const { data, error } = await supabase
+        .from('chat_messages')
+        .select('*')
+        .eq('caregiver_code', caregiverCode)
+        .eq('idoso_code', idosoCode)
+        .order('created_at', { ascending: true });
+
+      if (!error && data) return data;
+    } catch (err) {
+      console.warn('Erro ao buscar mensagens de chat no Supabase:', err.message);
+    }
+  }
+  return getLocalMessages(caregiverCode, idosoCode);
+}
+
+export async function sendChatMessage(caregiverCode, idosoCode, senderRole, senderName, content) {
+  const newMsg = {
+    caregiver_code: caregiverCode,
+    idoso_code: idosoCode,
+    sender_role: senderRole,
+    sender_name: senderName,
+    content: content.trim(),
+  };
+
+  if (isSupabaseConfigured) {
+    try {
+      const { data, error } = await supabase
+        .from('chat_messages')
+        .insert([newMsg])
+        .select()
+        .single();
+
+      if (!error && data) return data;
+    } catch (err) {
+      console.warn('Erro ao enviar mensagem no Supabase, salvando localmente:', err.message);
+    }
+  }
+
+  // localStorage fallback
+  const existing = getLocalMessages(caregiverCode, idosoCode);
+  const localMsg = { id: Date.now(), ...newMsg, created_at: new Date().toISOString() };
+  existing.push(localMsg);
+  saveLocalMessages(caregiverCode, idosoCode, existing);
+  return localMsg;
+}
+

@@ -125,19 +125,28 @@ export default function IdosoManagementModal({ isOpen, onClose, onIdosoAdded }) 
 
           {/* Form */}
           <form onSubmit={handleRegister} className="space-y-4">
-            <div>
-              <label className="block text-sm font-extrabold text-slate-900 mb-1">
-                Nome do Idoso
+            <div className="flex items-center justify-between">
+              <label className="block text-sm font-extrabold text-slate-900">
+                Nome do Idoso / Familiar *
               </label>
-              <input
-                type="text"
-                required
-                placeholder="Ex: Dona Maria da Silva"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full px-4 py-3 bg-white border-2 border-slate-400 rounded-xl text-base font-bold text-slate-950 focus:border-blue-700 outline-none"
-              />
+              <span className={`text-xs font-black px-2.5 py-1 rounded-full border ${
+                idososList.length >= 3 
+                  ? 'bg-amber-100 text-amber-950 border-amber-400' 
+                  : 'bg-blue-100 text-blue-950 border-blue-300'
+              }`}>
+                {idososList.length} / 3 cadastrados
+              </span>
             </div>
+
+            <input
+              type="text"
+              required
+              disabled={idososList.length >= 3}
+              placeholder={idososList.length >= 3 ? "Limite máximo de 3 idosos atingido" : "Ex: Dona Maria da Silva"}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full px-4 py-3 bg-white border-2 border-slate-400 rounded-xl text-base font-bold text-slate-950 focus:border-blue-700 outline-none disabled:bg-slate-100 disabled:text-slate-500"
+            />
 
             {error && (
               <p className="text-xs font-black text-red-700 bg-red-100 p-2.5 rounded-lg border border-red-300">
@@ -145,12 +154,18 @@ export default function IdosoManagementModal({ isOpen, onClose, onIdosoAdded }) 
               </p>
             )}
 
+            {idososList.length >= 3 && (
+              <p className="text-xs font-black text-amber-900 bg-amber-100 p-3 rounded-xl border border-amber-400">
+                Atenção: O plano de cuidador permite cadastrar no máximo 3 idosos vinculados.
+              </p>
+            )}
+
             <button
               type="submit"
-              disabled={loading}
-              className="w-full py-3.5 bg-blue-800 hover:bg-blue-900 text-white font-black text-base rounded-xl shadow-md cursor-pointer transition border border-blue-950"
+              disabled={loading || idososList.length >= 3}
+              className="w-full py-3.5 bg-blue-800 hover:bg-blue-900 disabled:bg-slate-400 text-white font-black text-base rounded-xl shadow-md cursor-pointer transition border border-blue-950"
             >
-              {loading ? 'Gerando Código...' : '+ Gerar Código e Cadastrar Idoso'}
+              {loading ? 'Gerando Código...' : idososList.length >= 3 ? 'Limite de 3 Idosos Atingido' : '+ Gerar Código e Cadastrar Idoso'}
             </button>
           </form>
 
