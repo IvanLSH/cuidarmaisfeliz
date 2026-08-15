@@ -3,6 +3,14 @@ import React from 'react';
 export default function Features({ onNavigate }) {
   const items = [
     {
+      id: 'chat',
+      title: 'Chat',
+      image: null,
+      bg: 'bg-teal-700',
+      hoverBg: 'hover:bg-teal-800',
+      textColor: 'text-white',
+    },
+    {
       id: 'exercises',
       title: 'Movimente!',
       image: '/images/exercises.jpg',
@@ -24,14 +32,6 @@ export default function Features({ onNavigate }) {
       image: '/images/events.jpg',
       bg: 'bg-purple-700',
       hoverBg: 'hover:bg-purple-800',
-      textColor: 'text-white',
-    },
-    {
-      id: 'chat',
-      title: 'Chat',
-      image: null,
-      bg: 'bg-teal-700',
-      hoverBg: 'hover:bg-teal-800',
       textColor: 'text-white',
     },
   ];
