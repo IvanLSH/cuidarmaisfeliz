@@ -127,7 +127,7 @@ export default function IdosoManagementModal({ isOpen, onClose, onIdosoAdded }) 
           <form onSubmit={handleRegister} className="space-y-4">
             <div>
               <label className="block text-sm font-extrabold text-slate-900 mb-1">
-                Nome do Idoso / Familiar *
+                Nome do Idoso
               </label>
               <input
                 type="text"
