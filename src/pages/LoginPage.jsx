@@ -81,33 +81,9 @@ export default function LoginPage({ onLoginSuccess, onBack, darkMode, onToggleDa
     <div className="min-h-screen bg-slate-100 dark:bg-slate-950 flex items-center justify-center p-4 sm:p-6 lg:p-8 transition-colors">
       <div className="w-full max-w-md relative">
 
-        {onToggleDarkMode && (
-          <div className="flex justify-end mb-3">
-            <button
-              onClick={onToggleDarkMode}
-              title={darkMode ? "Mudar para Modo Claro" : "Mudar para Modo Escuro"}
-              className="px-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-extrabold transition flex items-center gap-1.5 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-700 text-xs sm:text-sm"
-            >
-              <svg className="w-4 h-4 text-amber-500 dark:text-amber-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                {darkMode ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                )}
-              </svg>
-              <span>{darkMode ? 'Claro' : 'Escuro'}</span>
-            </button>
-          </div>
-        )}
-
         <div className="bg-white dark:bg-slate-900 rounded-3xl border-2 border-slate-300 dark:border-slate-800 shadow-2xl overflow-hidden">
 
           <div className="bg-blue-800 dark:bg-blue-950 border-b-4 border-blue-950 dark:border-blue-900 px-8 py-6 text-center">
-            <div className="w-14 h-14 rounded-2xl bg-white text-blue-900 flex items-center justify-center mx-auto mb-3 shadow-md border-2 border-blue-200">
-              <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
-            </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white">
               Painel do Cuidador
             </h1>
@@ -145,18 +121,12 @@ export default function LoginPage({ onLoginSuccess, onBack, darkMode, onToggleDa
 
             {successMsg && (
               <div className="mb-5 flex items-center gap-2 px-4 py-3 bg-emerald-100 dark:bg-emerald-950 border-2 border-emerald-500 text-emerald-950 dark:text-emerald-200 rounded-xl text-sm font-bold">
-                <svg className="w-5 h-5 text-emerald-800 dark:text-emerald-300 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                </svg>
                 {successMsg}
               </div>
             )}
 
             {error && (
               <div className="mb-5 flex items-center gap-2 px-4 py-3 bg-red-100 dark:bg-red-950 border-2 border-red-400 text-red-900 dark:text-red-200 rounded-xl text-sm font-bold">
-                <svg className="w-5 h-5 text-red-700 dark:text-red-300 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
                 {error}
               </div>
             )}
